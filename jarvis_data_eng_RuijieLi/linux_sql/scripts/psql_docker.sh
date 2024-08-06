@@ -6,16 +6,14 @@ db_username=$2
 db_password=$3
 
 # Start docker
-# Make sure you understand the double pipe operator
+# Basically OR operator, runs the 2nd command if the first command fails
+# I redirected output to /dev/null to avoid a wall of text
 sudo systemctl status docker > /dev/null || systemctl start docker
-
 
 # Check container status (try the following cmds on terminal)
 sudo docker container inspect jrvs-psql 1>/dev/null 2>/dev/null
 container_status=$?
-# if [ container_status -ne 0 ]; then
-#     echo 'creating container...'
-# fi
+
 # User switch case to handle create|stop|start opetions
 case $cmd in 
     create)
