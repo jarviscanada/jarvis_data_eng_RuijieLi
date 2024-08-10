@@ -81,7 +81,7 @@
     },
     {
       "company": "Polytechnique Montreal",
-      "description": "Made a telecommunication simulator written in Python run up to 65% faster (~1300 seconds to less than 500 seconds in one particular configuration) and use up to 50% less memory (~12-15GB less in one case) by implementing multiprocessing, removing certain function calls and @property, using the __slots__ attribute, avoiding calling scipy.rvs() in a loop, and avoiding copying large amounts of data between processes. Further attemps to optimize it with shared memory (BaseManager) and Boost.Python (translating part of the code to C++) were unsuccessful due to high overhead.",
+      "description": "Made a telecommunication simulator written in Python run up to 65% faster (~1300 seconds to less than 500 seconds in one particular configuration) and use up to 50% less memory (~12-15GB less in one case) by implementing multiprocessing, removing certain function calls and @property, using the __slots__ attribute, avoiding calling scipy.rvs() in a loop, and avoiding copying large amounts of data between processes. Further attempts to optimize it with shared memory (BaseManager) and Boost.Python (translating part of the code to C++) were unsuccessful due to high overhead.",
       "duration": "2019",
       "title": "Backend development intern"
     }

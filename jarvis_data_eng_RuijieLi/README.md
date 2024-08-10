@@ -40,7 +40,7 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](
 
 **Data management assistant, Fondation de Polytechnique (2021-2023)**: Made a telemarketing tool in Excel VBA (used for a few months), partially automated some data entry tasks, processed a few thousand call center logs (Python regex was used to make it faster), and worked a bit on some web pages.
 
-**Backend development intern, Polytechnique Montreal (2019)**: Made a telecommunication simulator written in Python run up to 65% faster (~1300 seconds to less than 500 seconds in one particular configuration) and use up to 50% less memory (~12-15GB less in one case) by implementing multiprocessing, removing certain function calls and @property, using the __slots__ attribute, avoiding calling scipy.rvs() in a loop, and avoiding copying large amounts of data between processes. Further attemps to optimize it with shared memory (BaseManager) and Boost.Python (translating part of the code to C++) were unsuccessful due to high overhead.
+**Backend development intern, Polytechnique Montreal (2019)**: Made a telecommunication simulator written in Python run up to 65% faster (~1300 seconds to less than 500 seconds in one particular configuration) and use up to 50% less memory (~12-15GB less in one case) by implementing multiprocessing, removing certain function calls and @property, using the __slots__ attribute, avoiding calling scipy.rvs() in a loop, and avoiding copying large amounts of data between processes. Further attempts to optimize it with shared memory (BaseManager) and Boost.Python (translating part of the code to C++) were unsuccessful due to high overhead.
 
 
 ## Education
