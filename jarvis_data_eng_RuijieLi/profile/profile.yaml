@@ -140,7 +140,7 @@ education:
   - school_name: "Polytechnique Montreal"
     duration: "2018-2023"
     degree: "Bachelor of Engineering"
-    department: "Computer and Software Engineering"
+    department: "Software Engineering"
     # optional
     awards_achievements: 
       - "GPA: 3.26/4.0"
