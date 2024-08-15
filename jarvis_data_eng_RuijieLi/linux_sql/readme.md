@@ -15,7 +15,7 @@ Use markdown code block for your quick-start commands
 - Insert hardware usage data into the DB using host_usage.sh. NOTE: this is a setup with one VM. If multiple VMs are used,
   replace `localhost` with the public IP of the VM that hosts the database
   `./host_usage.sh "localhost" 5432 "host_agent" YOUR_USERNAME_HERE YOUR_PASSWORD_HERE`
-- Crontab setup: use the following command to make the script `host_usage.sh` run every 1 minute
+- Crontab setup: use the following command to make the script `host_usage.sh` run every 1 minute (source:https://stackoverflow.com/a/878647/11627201)
   `crontab -l > mycron; echo "* * * * * bash /path/to/host_usage.sh localhost 5432 host_agent YOUR_USERNAME_HERE YOUR_PASSWORD_HERE > /tmp/host_usage.log" >> mycron && crontab mycron && rm mycron`
 
 # Implementation
@@ -101,4 +101,4 @@ The following things can be improved in the future:
 1. All manual steps can be automated with `gcloud` with a `.sh` script that runs the users' laptop, which would be responsible for deploying the Docker container on the VM that hosts the Postgresql database and sending the right scripts to each VM (could be a CD/CI pipeline on Gitlab).
 2. If the VM with the Docker container on it crashes, we lose all the data. It would be a great idea to back it up somewhere, could be in another region
 3. For the host_usage table, we can use the host name and the timestamp as a primary key for easier access.
-4. More customizability can be added (e.g. let the user choose the container name)s
+4. More customizability can be added (e.g. let the user choose the container name)
