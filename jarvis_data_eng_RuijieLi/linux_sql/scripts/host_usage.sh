@@ -22,7 +22,7 @@ disk_io=$(vmstat -d | awk '{print $10}' | tail -n 1 | xargs)
 disk_available=$(df -BM / | awk '{print $4}' | tail -n 1 | egrep -oh "[0-9]*")
 timestamp=$(vmstat -t | awk '{print $18, $NF}' | tail -n 1)
 
-id_query_output=$(psql -h localhost -U postgres -d host_agent -c "SELECT id FROM HOST_INFO WHERE hostname='ruijieli-HP-Laptop-15-dy2xxx'")
+id_query_output=$(psql -h localhost -U postgres -d host_agent -c "SELECT id FROM HOST_INFO WHERE hostname='$hostname'")
 id=$(echo "$id_query_output" | sed -n '3p' | xargs)
 
 insert_stmt="INSERT INTO host_usage(
