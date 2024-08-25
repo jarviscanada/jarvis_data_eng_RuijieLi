@@ -185,7 +185,7 @@ WHERE
   membercost * 50 < monthlymaintenance;
 ```
 
-###### Question 10: Select all tennis courts
+###### Question 8: Select all tennis courts
 ```sql
 SELECT 
   * 
@@ -194,7 +194,7 @@ FROM
 WHERE 
   "name" LIKE '%Tennis%'
 ```
-###### Question 11: Select a facility with an ID of 1 or 5
+###### Question 9: Select a facility with an ID of 1 or 5
 ```SQL
 SELECT 
   * 
@@ -203,7 +203,7 @@ FROM
 WHERE 
   facid IN (1, 5)
 ```
-###### Question 12: Select with date (select all registrations after september 1st 2012)
+###### Question 10: Select with date (select all registrations after september 1st 2012)
 ```SQL
 SELECT 
   memid, 
@@ -215,7 +215,7 @@ FROM
 WHERE 
   joindate >= DATE('2012-09-01')
 ```
-###### Question 13: Concatenate the results of 2 queries
+###### Question 11: Concatenate the results of 2 queries
 ```SQL
 (
   SELECT 
@@ -232,7 +232,7 @@ UNION
   )
 ```
 
-###### Question 14: Inner join - Start times by member David Farrell
+###### Question 12: Inner join - Start times by member David Farrell
 ```SQL
 SELECT 
   starttime 
@@ -244,7 +244,7 @@ WHERE
   AND members.firstname = 'David'
 ```
 
-###### Question 15: Bookings for all tennis courts, on September 21st 2012, sorted by start time
+###### Question 13: Bookings for all tennis courts, on September 21st 2012, sorted by start time
 ```SQL
 SELECT 
   starttime, 
@@ -265,7 +265,7 @@ ORDER BY
   bookings.starttime
 ```
 
-###### Question 16: Self join, list members with their recommenders
+###### Question 14: Self join, list members with their recommenders
 ```SQL
 SELECT 
   members.firstname as memfname, 
@@ -281,7 +281,7 @@ ORDER BY
   )
 ```
 
-###### Question 17: List all members who have recommended another member, without duplicates, sorted by last name then by first name
+###### Question 15: List all members who have recommended another member, without duplicates, sorted by last name then by first name
 ```SQL
 SELECT 
   DISTINCT members.firstname, 
@@ -295,7 +295,7 @@ ORDER BY
   members.surname, 
   members.firstname
 ```
-###### Question 18: List all members with their referers without using JOIN
+###### Question 16: List all members with their referers without using JOIN
 ```SQL
 SELECT 
   DISTINCT firstname || ' ' || surname AS "member", 
@@ -313,7 +313,7 @@ ORDER BY
   "member"
 ```
 
-###### Question 19: The number of recommendations each member has made, sorted by member ID
+###### Question 17: The number of recommendations each member has made, sorted by member ID
 ```SQL
 SELECT 
   recommendedby, 
@@ -328,7 +328,7 @@ ORDER BY
   recommendedby
 ```
 
-###### Question 20: List of total number of slots booked per facility, sorted by ID
+###### Question 18: List of total number of slots booked per facility, sorted by ID
 ``` SQL
 SELECT 
   facid, 
@@ -341,7 +341,7 @@ ORDER BY
   facid
 ```
 
-###### Question 21: Total number of slots per facility for September 2012
+###### Question 19: Total number of slots per facility for September 2012
 ```SQL
 SELECT 
   facid, 
@@ -355,7 +355,7 @@ GROUP BY
 ORDER BY 
   "Total Slots"
 ```
-###### Question 22: Total number of slots booked per month for the year 2012, for each facility, sorted by facility ID then by month
+###### Question 20: Total number of slots booked per month for the year 2012, for each facility, sorted by facility ID then by month
 ```SQL
 SELECT 
   facid, 
@@ -372,7 +372,7 @@ ORDER BY
   facid, 
   "month"
 ```
-###### Question 23: Total members who have made at least one booking
+###### Question 21: Total members who have made at least one booking
 ```SQL
 SELECT 
   COUNT(bookings.memid) 
@@ -384,7 +384,7 @@ FROM
       cd.bookings
   ) AS bookings
 ```
-###### Question 24: List of members and their first booking for September 2012, sorted by member ID
+###### Question 22: List of members and their first booking for September 2012, sorted by member ID
 ```SQL
 SELECT 
   members.surname, 
@@ -410,7 +410,7 @@ GROUP BY
 ORDER BY 
   members.memid
 ```
-###### Question 25: First name and last name of each member, plus a row with the total number of members
+###### Question 23: First name and last name of each member, plus a row with the total number of members
 
 ```SQL
 -- Solution with cross join
@@ -438,7 +438,7 @@ FROM
 ORDER BY 
   joindate
 ```
-###### Question 26: A list of members, sorted by their join date, with a row representing the row number
+###### Question 24: A list of members, sorted by their join date, with a row representing the row number
 ```SQL
 SELECT 
   RANK() OVER(
@@ -450,7 +450,7 @@ SELECT
 FROM 
   cd.members
 ```
-###### Question 27: Display the facility(ies) with the highest number(s) of bookings
+###### Question 25: Display the facility(ies) with the highest number(s) of bookings
 ```SQL
 WITH sum_slots AS (
   SELECT 
@@ -474,11 +474,11 @@ FROM
   sum_slots 
   INNER JOIN max_slot ON sum_slots.sum_ = max_slot.max_
 ```
-###### Question 28: Concatenating strings (first name + , + last name)
+###### Question 26: Concatenating strings (first name + , + last name)
 ```SQL
 SELECT surname || ', ' || firstname FROM cd.members
 ```
-###### Question 29: List of all members whose phone number is formatted like (111) 1111-1111
+###### Question 27: List of all members whose phone number is formatted like (111) 1111-1111
 ```SQL
 SELECT 
   memid, 
@@ -490,7 +490,7 @@ WHERE
 ORDER BY 
   memid
 ```
-###### Question 30: For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
+###### Question 28: For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
 ```SQL
 SELECT 
   SUBSTRING(surname, 1, 1) AS letter, 
