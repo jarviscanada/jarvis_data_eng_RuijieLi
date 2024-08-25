@@ -39,10 +39,10 @@ sudo docker run --name pgadmin4 \
     -d dpage/pgadmin4;
 # you can how access pgadmin at http://[::]:80 
 ```
-To use run the queries, login into PGAdmin with `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD`, and right click `servers --> Register --> Server...`. In the pop up, enter a name, and in `connections`, enter the IP address of the container `pgadmin4` (which can be obtained with `sudo docker inspect pgadmin4`) and the database password (`PGPASSWORD`).
+To use the queries, log into PGAdmin with `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD`, and right click `servers --> Register --> Server...`. In the pop up, enter a name, and in `connections`, enter the IP address of the container `pgadmin4` (which can be obtained with `sudo docker inspect pgadmin4`) and the database password (`PGPASSWORD`).
 
 ###### Table Setup (DDL)
-The table and the schema can be created with the following commands:
+The tables and the schema can be created with the following commands:
 ```sql
 CREATE SCHEMA IF NOT EXISTS cd;
 CREATE TABLE IF NOT EXISTS cd.members(
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS cd.bookings(
   slots INTEGER
 );
 ```
-However, to we can create everything automatically with the following bash commands:
+We can also setup everything automatically with the following bash command:
 ```bash
 psql -U postgres -p 5432 -h localhost -f path/to/sql/clubdata.sql -d postgres -x -q
 ```
@@ -85,7 +85,7 @@ VALUES
   (9, 'Spa', 20, 30, 100000, 800)
 ```
 
-###### Question 1: INSERT a new facility, but this time assign ID automatically
+###### Question 2: INSERT a new facility, but this time assign ID automatically
 Solution 1: this one seems to be the easiest (it was suggested by ChatGPT), just use `MAX(facid) + 1`
 ```SQL
 INSERT INTO cd.facilities (
@@ -128,7 +128,7 @@ INSERT INTO cd.facilities (
 VALUES 
   ('Spa', 20, 30, 100000, 800);
 ```
-###### Update with where
+###### Question 3: Update with where
 ```SQL
 UPDATE 
   cd.facilities 
@@ -138,7 +138,7 @@ WHERE
   "name" = 'Tennis Court 2';
 ```
 
-###### Update table with result from another query (make tennis court 2 10% more expensive then tennis court 1)
+###### Question 4: Update table with result from another query (make tennis court 2 10% more expensive then tennis court 1)
 ```SQL
 UPDATE 
   cd.facilities 
@@ -158,14 +158,14 @@ FROM
  WHERE
  	"name" = 'Tennis Court 2'
 ```
-###### Delete all rows from table
+###### Question 5: Delete all rows from table
 ```SQL
 DELETE FROM 
   cd.bookings 
 WHERE 
   1 = 1
 ```
-###### Delete particular record
+###### Question 6: Delete particular record
 ```SQL
 DELETE FROM 
   cd.members 
@@ -173,7 +173,7 @@ WHERE
   memid = 37
 ```
 
-###### Select all rows where membercost is 1/50 of the maintenance cost
+###### Question 7: Select all rows where membercost is 1/50 of the maintenance cost
 ```SQL
 SELECT 
   "name", 
@@ -185,7 +185,7 @@ WHERE
   membercost * 50 < monthlymaintenance;
 ```
 
-###### Select all tennis courts
+###### Question 10: Select all tennis courts
 ```sql
 SELECT 
   * 
@@ -194,7 +194,7 @@ FROM
 WHERE 
   "name" LIKE '%Tennis%'
 ```
-###### Select a facility with an ID of 1 or 5
+###### Question 11: Select a facility with an ID of 1 or 5
 ```SQL
 SELECT 
   * 
@@ -203,7 +203,7 @@ FROM
 WHERE 
   facid IN (1, 5)
 ```
-###### Select with date (select all registrations after september 1st 2012)
+###### Question 12: Select with date (select all registrations after september 1st 2012)
 ```SQL
 SELECT 
   memid, 
@@ -215,7 +215,7 @@ FROM
 WHERE 
   joindate >= DATE('2012-09-01')
 ```
-###### Concatenate the results of 2 queries
+###### Question 13: Concatenate the results of 2 queries
 ```SQL
 (
   SELECT 
@@ -232,7 +232,7 @@ UNION
   )
 ```
 
-###### Inner join - Start times by member David Farrell
+###### Question 14: Inner join - Start times by member David Farrell
 ```SQL
 SELECT 
   starttime 
@@ -244,7 +244,7 @@ WHERE
   AND members.firstname = 'David'
 ```
 
-###### Bookings for all tennis courts, on September 21st 2012, sorted by start time
+###### Question 15: Bookings for all tennis courts, on September 21st 2012, sorted by start time
 ```SQL
 SELECT 
   starttime, 
@@ -265,7 +265,7 @@ ORDER BY
   bookings.starttime
 ```
 
-###### Self join, list members with their recommenders
+###### Question 16: Self join, list members with their recommenders
 ```SQL
 SELECT 
   members.firstname as memfname, 
@@ -281,7 +281,7 @@ ORDER BY
   )
 ```
 
-###### List all members who have recommended another member, without duplicates, sorted by last name then by first name
+###### Question 17: List all members who have recommended another member, without duplicates, sorted by last name then by first name
 ```SQL
 SELECT 
   DISTINCT members.firstname, 
@@ -295,7 +295,7 @@ ORDER BY
   members.surname, 
   members.firstname
 ```
-###### List all members with their referers without using JOIN
+###### Question 18: List all members with their referers without using JOIN
 ```SQL
 SELECT 
   DISTINCT firstname || ' ' || surname AS "member", 
@@ -313,7 +313,7 @@ ORDER BY
   "member"
 ```
 
-###### The number of recommendations each member has made, sorted by member ID
+###### Question 19: The number of recommendations each member has made, sorted by member ID
 ```SQL
 SELECT 
   recommendedby, 
@@ -328,7 +328,7 @@ ORDER BY
   recommendedby
 ```
 
-###### List of total number of slots booked per facility, sorted by ID
+###### Question 20: List of total number of slots booked per facility, sorted by ID
 ``` SQL
 SELECT 
   facid, 
@@ -341,7 +341,7 @@ ORDER BY
   facid
 ```
 
-###### Total number of slots per facility for September 2012
+###### Question 21: Total number of slots per facility for September 2012
 ```SQL
 SELECT 
   facid, 
@@ -355,7 +355,7 @@ GROUP BY
 ORDER BY 
   "Total Slots"
 ```
-###### Total number of slots booked per month for the year 2012, for each facility, sorted by facility ID then by month
+###### Question 22: Total number of slots booked per month for the year 2012, for each facility, sorted by facility ID then by month
 ```SQL
 SELECT 
   facid, 
@@ -372,7 +372,7 @@ ORDER BY
   facid, 
   "month"
 ```
-###### Total members who have made at least one booking
+###### Question 23: Total members who have made at least one booking
 ```SQL
 SELECT 
   COUNT(bookings.memid) 
@@ -384,7 +384,7 @@ FROM
       cd.bookings
   ) AS bookings
 ```
-###### List of members and their first booking for September 2012, sorted by member ID
+###### Question 24: List of members and their first booking for September 2012, sorted by member ID
 ```SQL
 SELECT 
   members.surname, 
@@ -410,7 +410,7 @@ GROUP BY
 ORDER BY 
   members.memid
 ```
-###### First name and last name of each member, plus a row with the total number of members
+###### Question 25: First name and last name of each member, plus a row with the total number of members
 
 ```SQL
 -- Solution with cross join
@@ -438,7 +438,7 @@ FROM
 ORDER BY 
   joindate
 ```
-###### A list of members, sorted by their join date, with a row representing the row number
+###### Question 26: A list of members, sorted by their join date, with a row representing the row number
 ```SQL
 SELECT 
   RANK() OVER(
@@ -450,7 +450,7 @@ SELECT
 FROM 
   cd.members
 ```
-###### Display the facility(ies) with the highest number(s) of bookings
+###### Question 27: Display the facility(ies) with the highest number(s) of bookings
 ```SQL
 WITH sum_slots AS (
   SELECT 
@@ -474,11 +474,11 @@ FROM
   sum_slots 
   INNER JOIN max_slot ON sum_slots.sum_ = max_slot.max_
 ```
-###### Concatenating strings (first name + , + last name)
+###### Question 27: Concatenating strings (first name + , + last name)
 ```SQL
 SELECT surname || ', ' || firstname FROM cd.members
 ```
-###### List of all members whose phone number is formatted like (111) 1111-1111
+###### Question 28: List of all members whose phone number is formatted like (111) 1111-1111
 ```SQL
 SELECT 
   memid, 
@@ -490,7 +490,7 @@ WHERE
 ORDER BY 
   memid
 ```
-###### For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
+###### Question 29: For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
 ```SQL
 SELECT 
   SUBSTRING(surname, 1, 1) AS letter, 
