@@ -474,11 +474,11 @@ FROM
   sum_slots 
   INNER JOIN max_slot ON sum_slots.sum_ = max_slot.max_
 ```
-###### Question 27: Concatenating strings (first name + , + last name)
+###### Question 28: Concatenating strings (first name + , + last name)
 ```SQL
 SELECT surname || ', ' || firstname FROM cd.members
 ```
-###### Question 28: List of all members whose phone number is formatted like (111) 1111-1111
+###### Question 29: List of all members whose phone number is formatted like (111) 1111-1111
 ```SQL
 SELECT 
   memid, 
@@ -490,7 +490,7 @@ WHERE
 ORDER BY 
   memid
 ```
-###### Question 29: For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
+###### Question 30: For each letter of the alphabet, display the number of members whose name starts with it, except if the number is 0
 ```SQL
 SELECT 
   SUBSTRING(surname, 1, 1) AS letter, 
