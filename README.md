@@ -1,6 +1,7 @@
-# Rui Jie LI . Jarvis Consulting
+# Rui Jie Li . Jarvis Consulting
 
-I am looking for an opportunity as a full-stack developer. I have a bachelor's degree in software engineering from Polytechnique Montreal and about a year of work experience in software development, both in backend and frontend development. I am proactive, and I enjoy solving problems and building stuff. I am familiar with C++ (one project on embedded programming, one class on Linux OS, and OOP & design patterns), Python (performance optimization), JavaScript (frontend development), CSS (responsive design), and TypeScript (Angular for frontend, Node.js for backend) from academic and work experience.
+ I am looking for an opportunity as a full-stack developer. # my career goal is to become ... # remove words like stuff, use specific languages, be more specific
+I have a bachelor's degree in software engineering from Polytechnique Montreal and about a year of work experience in software development, both in backend and frontend development. I am proactive, and I enjoy solving problems and building stuff. # this is kinda repeating next lines... talk more about the products # e.g. embedded programming, mention the grade or something # can add hobbies I am familiar with C++ (one project on embedded programming, one class on Linux OS, and OOP & design patterns), Python (performance optimization), JavaScript (frontend development), CSS (responsive design), and TypeScript (Angular for frontend, Node.js for backend) from academic and work experience.
 
 ## Skills
 
