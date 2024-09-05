@@ -1,6 +1,5 @@
 package ca.jrvs.apps.grep;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,12 +14,14 @@ import java.util.stream.Collector;
 public class WriteToFileCollector implements Collector<String, FileWriter, Boolean> {
 
     private final FileWriter fileWriter;
+    private final String outFilePath;
     private boolean newline = true;
     WriteToFileCollector(File file) {
+        this.outFilePath = file.getAbsolutePath();
         try {
             this.fileWriter = new FileWriter(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while creating FileWriter for file " + outFilePath, e);
         }
     }
 
@@ -39,7 +40,7 @@ public class WriteToFileCollector implements Collector<String, FileWriter, Boole
             try {
                 writer.write(value + (newline ? "\n" : ""));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("IOException while writing " + newline + " to " + outFilePath, e);
             }
         };
     }
@@ -56,7 +57,7 @@ public class WriteToFileCollector implements Collector<String, FileWriter, Boole
                 writer.close();
                 return true;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error while closing FileWriter to path " + outFilePath, e);
             }
         };
     }

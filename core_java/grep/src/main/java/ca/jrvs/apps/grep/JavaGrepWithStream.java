@@ -31,14 +31,13 @@ public class JavaGrepWithStream {
         javaGrepWithStream.setOutFile(args[2]);
         try {
             javaGrepWithStream.process();
-        } catch (Exception ex) {
-            javaGrepWithStream.logger.error("Error: unable to process", ex);
+        } catch (IOException ex) {
+            javaGrepWithStream.logger.error("IO Exception while processing files", ex);
         }
     }
     public void process() throws IOException {
         Stream<Path> paths = listFiles(this.rootPath);
         logger.debug(this.outFile);
-//        boolean success = true;
         boolean filtered = paths.map(
             Path::toFile
         ).flatMap(
@@ -60,7 +59,7 @@ public class JavaGrepWithStream {
                 path -> !Files.isDirectory(path)
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error: IO Exception while reading root directory", e);
         }
     }
 
@@ -68,7 +67,7 @@ public class JavaGrepWithStream {
         try {
             return Files.lines(inputFile.toPath(), Charset.forName("ISO-8859-1"));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error: IO Exception while reading " + inputFile.getAbsolutePath(), e);
         }
     }
 
