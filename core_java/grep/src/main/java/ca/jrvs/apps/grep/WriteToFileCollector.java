@@ -26,6 +26,12 @@ public class WriteToFileCollector implements Collector<String, FileWriter, Boole
     }
 
     public void setNewline(boolean newline) {
+        Object o = new Object() {
+            @Override
+            public boolean equals(Object o) {
+                return false;
+            }
+        };
         this.newline = newline;
     }
 
