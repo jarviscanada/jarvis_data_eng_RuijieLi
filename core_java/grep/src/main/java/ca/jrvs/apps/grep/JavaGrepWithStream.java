@@ -12,7 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -38,12 +40,10 @@ public class JavaGrepWithStream {
         return CHUNK_SIZE / 1024 / 1024;
     }
 
-
     public static void main(String[] args) {
         if(args.length < 3) {
             throw new IllegalArgumentException("USAGE: JavaGrep regex rootPath outFile");
         }
-
         BasicConfigurator.configure();
         JavaGrepWithStream javaGrepWithStream = new JavaGrepWithStream();
         javaGrepWithStream.setRegex(args[0]);
@@ -58,33 +58,11 @@ public class JavaGrepWithStream {
             javaGrepWithStream.logger.error("IO Exception while processing files", ex);
         }
     }
+
     public void process() throws IOException {
         Stream<Path> paths = listFiles(this.rootPath);
         logger.debug(this.outFile);
-        Map<Boolean, List<Path>> filesToRead = paths.collect(Collectors.partitioningBy(
-            (path) -> {
-                try {
-                    return Files.size(path) < this.CHUNK_SIZE;
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        ));
-        Stream<Path> smallFiles = filesToRead.get(true).stream();
-        Stream<Path> largeFiles = filesToRead.get(false).stream();
-
-        String smallFilesContent = smallFiles.map(
-            Path::toFile
-        ).flatMap(
-            this::readLines
-        ).filter(
-            this::containsPattern
-        ).collect(
-            new StringBuilderCollector()
-        );
-        this.writeToFile(smallFilesContent);
-
-        largeFiles.map(
+        paths.map(
             Path::toFile
         ).forEach(
             this::readLargeFile
@@ -94,11 +72,10 @@ public class JavaGrepWithStream {
     void readLargeFile(File file)  {
         try(FileInputStream fis = new FileInputStream(file);) {
             byte[] buffer = new byte[CHUNK_SIZE]; // Buffer to hold 20MB chunks
-//            int bytesRead;
             int counter = 1;
             long fileSize = Files.size(file.toPath());
             while (fis.read(buffer)!= -1) {
-                logger.debug("Progress: {}", Math.min((float) counter * (float)CHUNK_SIZE / (float)fileSize * 100.0, 100.0));
+                logger.debug("Progress reading {} : {}", file.toPath(), Math.min((float) counter * (float)CHUNK_SIZE / (float)fileSize * 100.0, 100.0));
                 counter++;
                 String s = new String(buffer, StandardCharsets.ISO_8859_1);
                 Stream<String> lines = Arrays.stream(s.split("\n"));
