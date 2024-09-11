@@ -7,16 +7,16 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class StringBuilderCollector implements Collector<String,StringBuilder,String> {
-
+    private StringBuilder sb;
     StringBuilderCollector() {
+        this.sb = new StringBuilder();
     }
 
     @Override
     public Supplier<StringBuilder> supplier() {
-        return StringBuilder::new;
+        return () -> {return this.sb;};
     }
 
     @Override
@@ -30,7 +30,7 @@ public class StringBuilderCollector implements Collector<String,StringBuilder,St
     @Override
     public BinaryOperator<StringBuilder> combiner() {
         return (sb1, sb2) -> {
-            sb1.append(sb2);
+            // sb1.append(sb2);
             return sb1;
         };
     }

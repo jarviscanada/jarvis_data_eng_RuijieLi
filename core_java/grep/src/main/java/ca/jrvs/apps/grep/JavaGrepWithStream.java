@@ -2,8 +2,8 @@ package ca.jrvs.apps.grep;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.Charset;
@@ -12,13 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
@@ -41,6 +36,7 @@ public class JavaGrepWithStream {
     }
 
     public static void main(String[] args) {
+
         if(args.length < 3) {
             throw new IllegalArgumentException("USAGE: JavaGrep regex rootPath outFile");
         }
@@ -49,6 +45,7 @@ public class JavaGrepWithStream {
         javaGrepWithStream.setRegex(args[0]);
         javaGrepWithStream.setRootPath(args[1]);
         javaGrepWithStream.setOutFile(args[2]);
+        javaGrepWithStream.logger.debug("name: {}", ManagementFactory.getRuntimeMXBean().getName());
         if(args.length >= 4) {
             javaGrepWithStream.setChunkSize(Integer.parseInt(args[3]));
         }
@@ -77,7 +74,7 @@ public class JavaGrepWithStream {
             while (fis.read(buffer)!= -1) {
                 logger.debug("Progress reading {} : {}", file.toPath(), Math.min((float) counter * (float)CHUNK_SIZE / (float)fileSize * 100.0, 100.0));
                 counter++;
-                String s = new String(buffer, StandardCharsets.ISO_8859_1);
+                String s = new String(buffer, StandardCharsets.ISO_8859_1).trim();
                 Stream<String> lines = Arrays.stream(s.split("\n"));
                 String chunkContent = lines.filter(
                     this::containsPattern
@@ -110,6 +107,7 @@ public class JavaGrepWithStream {
     }
 
     public boolean containsPattern(String line) {
+        logger.debug(line);
         return this.compiledPattern.matcher(line).find();
     }
 
