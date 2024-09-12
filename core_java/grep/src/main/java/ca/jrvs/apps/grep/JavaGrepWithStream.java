@@ -3,6 +3,7 @@ package ca.jrvs.apps.grep;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.management.ManagementFactory;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -71,7 +72,7 @@ public class JavaGrepWithStream {
             if(Files.size(file.toPath()) <= CHUNK_SIZE) {
                 this.filterEntireFile(file);
             } else {
-                this.filterFileByChunk(file);
+                this.filterFileByLine(file);
             }
         } catch (IOException e) {
             throw new RuntimeException("IO Error while checking file size of " + file.toPath(), e);
@@ -92,25 +93,17 @@ public class JavaGrepWithStream {
         }
     }
 
-    void filterFileByChunk(File file)  {
-        try(FileInputStream fis = new FileInputStream(file);) {
-            byte[] buffer = new byte[CHUNK_SIZE]; // Buffer to hold 20MB chunks
-            int counter = 1;
-            long fileSize = Files.size(file.toPath());
-            while (fis.read(buffer)!= -1) {
-                logger.debug("Progress reading {} : {}", file.toPath(), Math.min((float) counter * (float)CHUNK_SIZE / (float)fileSize * 100.0, 100.0));
-                counter++;
-                String s = new String(buffer, StandardCharsets.ISO_8859_1).trim();
-                Stream<String> lines = Arrays.stream(s.split("\n"));
-                String chunkContent = lines.filter(
-                    this::containsPattern
-                ).collect(
-                    new StringBuilderCollector()
-                );
-                this.writeToFile(chunkContent);
-            }
+    void filterFileByLine(File file)  {
+        Path path = file.toPath();
+        
+        try(Stream<String> lines = Files.lines(path, StandardCharsets.ISO_8859_1) ) {
+
+            Iterable<String> iterable = lines.filter(this::containsPattern)::iterator;
+            Files.write(Paths.get(this.outFile), iterable, StandardCharsets.ISO_8859_1, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+
         } catch (IOException e) {
-            throw new RuntimeException("Error while reading file " + file.getPath(), e);
+            // Java has a class representing runtime IOException:
+            throw new UncheckedIOException("Error while reading file " + path, e);
         }
     }
 
