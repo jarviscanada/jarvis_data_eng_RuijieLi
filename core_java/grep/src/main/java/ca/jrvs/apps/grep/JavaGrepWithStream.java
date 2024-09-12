@@ -62,11 +62,37 @@ public class JavaGrepWithStream {
         paths.map(
             Path::toFile
         ).forEach(
-            this::readLargeFile
+            this::filterFile
         );
     }
 
-    void readLargeFile(File file)  {
+    void filterFile(File file) {
+        try {
+            if(Files.size(file.toPath()) <= CHUNK_SIZE) {
+                this.filterEntireFile(file);
+            } else {
+                this.filterFileByChunk(file);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("IO Error while checking file size of " + file.toPath(), e);
+        }
+    }
+
+    void filterEntireFile(File file) {
+        try (Stream<String> lines = Files.readAllLines(file.toPath()).stream()) {
+            String chunkContent = lines.filter(
+                this::containsPattern
+            ).collect(
+                new StringBuilderCollector()
+            );
+            logger.debug("Reading small file {}", file.toPath());
+            this.writeToFile(chunkContent);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while processing file " + file.toPath(), e);
+        }
+    }
+
+    void filterFileByChunk(File file)  {
         try(FileInputStream fis = new FileInputStream(file);) {
             byte[] buffer = new byte[CHUNK_SIZE]; // Buffer to hold 20MB chunks
             int counter = 1;
@@ -107,7 +133,7 @@ public class JavaGrepWithStream {
     }
 
     public boolean containsPattern(String line) {
-        logger.debug(line);
+        // logger.debug(line);
         return this.compiledPattern.matcher(line).find();
     }
 
