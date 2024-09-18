@@ -1,6 +1,6 @@
 # Rui Jie Li . Jarvis Consulting
 
- As someone who enjoys problem solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis. In my free time, I'd sometimes go play badminto or basketball (not on a profesionnal level, just for fun), and sometimes I'd go running.
+ As someone who enjoys problem-solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis. In my free time, I'd sometimes go play badminton or basketball (not on a professional level, just for fun), and sometimes I'd go running.
 
 ## Skills
 
@@ -15,7 +15,7 @@
 Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](https://github.com/jarviscanada/jarvis_data_eng_RuijieLi)
 
 
-**Linux Cluster Resource Monitoring App** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_RuijieLi/tree/master/linux_sql)]: The project consists of a Linux Bash script that monitors the ressource usage of Rocky Linux virtual machines on Google Cloud. The scripts are triggered by crontab and send the information to a Postgresql database that runs in a Docker container.
+**Linux Cluster Resource Monitoring App** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_RuijieLi/tree/master/linux_sql)]: The project consists of a Linux Bash script that monitors the resource usage of Rocky Linux virtual machines on Google Cloud. The scripts are triggered by crontab and send the information to a Postgresql database that runs in a Docker container.
 
 **RDBSM and SQL** [[GitHub](https://github.com/jarviscanada/jarvis_data_eng_RuijieLi/tree/master/sql)]: This project is mainly for learning SQL, with statements like SELECT, UPDATE, DELETE, INSERT, various types of JOIN operations, etc. PostgreSQL was used to run the database, and PGAdmin was used to run the commands.
 
@@ -30,11 +30,11 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](
 
 **Cross-platform drawing app**: The app consisted of a cross-platform drawing app. I made a chatting feature on Android that allows users to send messages in different channels (some groups are public, others are only for people drawing on the same picture). I also made parts of the user profile. The Android app was written in Kotlin and Firebase was used as a database.
 
-**Browser drawing app**: The project consisted of making a web version of Microsoft Paint in Angular/TypeScript. I implemented the following drawing tools: straight line, polygon, bucket fill (left click to color connected pixels, right click to color all pixels on image), a part of free from selection, and aerosol. I also implemented undo/redo with the design pattern "Command", as well as unit tests with up Jasmine
+**Browser drawing app**: The project consisted of making a web version of Microsoft Paint in Angular/TypeScript. I implemented the following drawing tools: straight line, polygon, bucket fill (left-click to color connected pixels, right-click to color all pixels on image), a part of free from selection, and aerosol. I also implemented undo/redo with the design pattern "Command", as well as unit tests with up Jasmine
 
-**Embedded programming** [[GitHub](https://github.com/atarixGB/INF1900-H20-projet)]: The project consisted of a robot that can complete an obstacle course (e.g. following a black line and avoiding walls) and was done as part of a class. I worked on measuring distance with sonars, CTC, and implementing object-oriented programming to the classes representing the LEDs. There were also features such as debouncing buttons and interrupts that everyone had to implement as part of the class.
+**Embedded programming** [[GitHub](https://github.com/atarixGB/INF1900-H20-projet)]: The project aimed at programming a robot that can complete an obstacle course (e.g. following a black line and avoiding walls) and was done as part of a class. I worked on measuring distance with sonars, CTC, and implementing object-oriented programming to the classes representing the LEDs. There were also features such as debouncing buttons and interrupts that everyone had to implement as part of the class.
 
-**PolyStar computer vision team**: The project consists of a competition where each team have to make robots (each robot have armor plates with a number on it, and LEDs indicating whether it's on the red team or the blue team). The goal is to have our robots shoot the other team's robots. I wrote a program to split 1920x1080 images into 1080x720 images based on XML data, annotated 200 pictures for the machine learning algorithm, and wrote a program to detect the color of an LED in a picture (return gray if it is off, return red or blue if it is on).
+**PolyStar computer vision team**: The project consists of a competition where each team has to make robots (each robot has armor plates with a number on it, and LEDs indicating whether it's on the red team or on the blue team). The goal is to have our robots shoot the other team's robots. I wrote a program to split 1920x1080 images into 1080x720 images based on XML data, annotated 200 pictures for the machine learning algorithm, and wrote a program to detect the color of an LED in a picture (return gray if it is off, return red or blue if it is on).
 
 
 ## Professional Experiences
@@ -47,7 +47,7 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](
 
 **Data management assistant, Fondation de Polytechnique (2021-2023)**: I was mostly working with Blackbaud products. I maintained and edited some web pages, partially automated some data entry tasks, and made a telemarketing tool that was used for a few months after Blackbaud removed theirs.
 
-**Backend development intern, Polytechnique Montreal (2020)**: I made a telecommunication simulator run up to 65% faster and use upt to a bit less than 50% less memory, depending on the simulation configuration. The result was achieved by adding/optimizing multiprocessing, using the __slots__ attribute, and reducing function calls (especially SciPy.rvs). I also attempted further optimizations with shared memory (BaseManager) and Boost.Python (translating part of the code to C++), however they were unsuccessful due to high overhead.
+**Backend development intern, Polytechnique Montreal (2020)**: I made a telecommunication simulator run up to 65% faster and use up to a bit less than 50% less memory, depending on the simulation configuration. The result was achieved by adding/optimizing multiprocessing, using the __slots__ attribute, and reducing function calls (especially SciPy.rvs). I also attempted further optimizations with shared memory (BaseManager) and Boost.Python (translating part of the code to C++), however they were unsuccessful due to high overhead.
 
 
 ## Education

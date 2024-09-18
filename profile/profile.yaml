@@ -17,8 +17,7 @@ github_repo_root_url: https://github.com/jarviscanada/jarvis_data_eng_RuijieLi
 # change the wording? e.g. building stuff
 # specification about full stack (full time, part time, contract?)
 summary: "
-As someone who enjoys problem solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis.
-In my free time, I'd sometimes go play badminto or basketball (not on a profesionnal level, just for fun), and sometimes I'd go running."
+As someone who enjoys problem-solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis. In my free time, I'd sometimes go play badminton or basketball (not on a professional level, just for fun), and sometimes I'd go running."
 
 # Group your skills by level.
 # Your skills can be anything software related (e.g. language, frameworks, methodologies, software, etc.).
@@ -61,7 +60,7 @@ jarvis_projects:
     git_url: "/linux_sql"
     # Please read the project description guideline carefully. Make sure you follow the simplified SDLC pattern. (t.ly/NlXQ)
     # Please include the following keywords: CentOS, Bash/Shell, docker, RDBMS/SQL/Postgresql, crontab, data analytics
-    description: "The project consists of a Linux Bash script that monitors the ressource usage of Rocky Linux virtual machines on Google Cloud. The scripts are triggered by crontab and send the information to a Postgresql database that runs in a Docker container."
+    description: "The project consists of a Linux Bash script that monitors the resource usage of Rocky Linux virtual machines on Google Cloud. The scripts are triggered by crontab and send the information to a Postgresql database that runs in a Docker container."
   
   - name: "RDBSM and SQL"
     git_url: "/sql"
@@ -111,15 +110,15 @@ highlighted_projects:
     description: "The app consisted of a cross-platform drawing app. I made a chatting feature on Android that allows users to send messages in different channels (some groups are public, others are only for people drawing on the same picture). I also made parts of the user profile. The Android app was written in Kotlin and Firebase was used as a database."
   - name: "Browser drawing app"
     git_url:
-    description: "The project consisted of making a web version of Microsoft Paint in Angular/TypeScript. I implemented the following drawing tools: straight line, polygon, bucket fill (left click to color connected pixels, right click to color all pixels on image), a part of free from selection, and aerosol. I also implemented undo/redo with the design pattern \"Command\", as well as unit tests with up Jasmine"
+    description: "The project consisted of making a web version of Microsoft Paint in Angular/TypeScript. I implemented the following drawing tools: straight line, polygon, bucket fill (left-click to color connected pixels, right-click to color all pixels on image), a part of free from selection, and aerosol. I also implemented undo/redo with the design pattern \"Command\", as well as unit tests with up Jasmine"
   - name: "Embedded programming"
     #URL is optional
     git_url: "https://github.com/atarixGB/INF1900-H20-projet"
     # The project description must start with an action verb (https://bit.ly/3guO98u)
-    description: "The project consisted of a robot that can complete an obstacle course (e.g. following a black line and avoiding walls) and was done as part of a class. I worked on measuring distance with sonars, CTC, and implementing object-oriented programming to the classes representing the LEDs. There were also features such as debouncing buttons and interrupts that everyone had to implement as part of the class."
+    description: "The project aimed at programming a robot that can complete an obstacle course (e.g. following a black line and avoiding walls) and was done as part of a class. I worked on measuring distance with sonars, CTC, and implementing object-oriented programming to the classes representing the LEDs. There were also features such as debouncing buttons and interrupts that everyone had to implement as part of the class."
   - name: "PolyStar computer vision team"
     git_url:
-    description: "The project consists of a competition where each team have to make robots (each robot have armor plates with a number on it, and LEDs indicating whether it's on the red team or the blue team). The goal is to have our robots shoot the other team's robots. I wrote a program to split 1920x1080 images into 1080x720 images based on XML data, annotated 200 pictures for the machine learning algorithm, and wrote a program to detect the color of an LED in a picture (return gray if it is off, return red or blue if it is on)."
+    description: "The project consists of a competition where each team has to make robots (each robot has armor plates with a number on it, and LEDs indicating whether it's on the red team or on the blue team). The goal is to have our robots shoot the other team's robots. I wrote a program to split 1920x1080 images into 1080x720 images based on XML data, annotated 200 pictures for the machine learning algorithm, and wrote a program to detect the color of an LED in a picture (return gray if it is off, return red or blue if it is on)."
 
 #List of professional experience
 # Please read the project description guideline carefully. Make sure you follow the simplified SDLC pattern. (t.ly/NlXQ)
@@ -150,7 +149,7 @@ professional_experience:
   - title: "Backend development intern"
     company: "Polytechnique Montreal"
     duration: "2020"
-    description: "I made a telecommunication simulator run up to 65% faster and use upt to a bit less than 50% less memory, depending on the simulation configuration. The result was achieved by adding/optimizing multiprocessing, using the __slots__ attribute, and reducing function calls (especially SciPy.rvs). I also attempted further optimizations with shared memory (BaseManager) and Boost.Python (translating part of the code to C++), however they were unsuccessful due to high overhead."
+    description: "I made a telecommunication simulator run up to 65% faster and use up to a bit less than 50% less memory, depending on the simulation configuration. The result was achieved by adding/optimizing multiprocessing, using the __slots__ attribute, and reducing function calls (especially SciPy.rvs). I also attempted further optimizations with shared memory (BaseManager) and Boost.Python (translating part of the code to C++), however they were unsuccessful due to high overhead."
   # - title: "Cashier"
   #   company: "Aer Rianta International"
   #   duration: "2019"
