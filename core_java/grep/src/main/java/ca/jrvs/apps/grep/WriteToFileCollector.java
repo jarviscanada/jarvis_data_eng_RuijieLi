@@ -17,6 +17,8 @@ public class WriteToFileCollector implements Collector<String, FileWriter, Boole
     private final String outFilePath;
     private boolean newline = true;
     WriteToFileCollector(File file) {
+        String[] s = {"new String[12]"};
+        s[1] = "12";
         this.outFilePath = file.getAbsolutePath();
         try {
             this.fileWriter = new FileWriter(file);
