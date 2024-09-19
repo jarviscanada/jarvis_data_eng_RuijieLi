@@ -1,5 +1,5 @@
 package ca.jrvs.exercise.jdbc;
-
+// this is an exercise file from Linkedin. I made some modifications to make it easier to use
 import ca.jrvs.exercise.jdbc.util.DataTransferObject;
 
 public class Customer implements DataTransferObject{

@@ -1,4 +1,6 @@
 package ca.jrvs.exercise.jdbc;
+// this is an exercise file from Linkedin.
+// I mostly copied it as is except using the logger instead of print stack trace
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
