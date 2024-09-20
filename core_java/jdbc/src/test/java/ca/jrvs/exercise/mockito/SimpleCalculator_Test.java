@@ -1,15 +1,16 @@
 package ca.jrvs.exercise.mockito;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class SimpleCalculator_Test {
 	
 	SimpleCalculator calculator;
-    @Before
+    @BeforeEach
     public void init() {
 		this.calculator = new SimpleCalculatorImp();
 	}
