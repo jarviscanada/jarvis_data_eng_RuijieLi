@@ -23,4 +23,11 @@ public class Position {
     public void setValuePaid(double valuePaid) {
         this.valuePaid = valuePaid;
     }
+    public String toString() {
+        return "{\n" +
+            "   ticker      : " + ticker        + "\n" +
+            "   numOfShares : " + numOfShares   + "\n" +
+            "   valuePaid   : " + valuePaid     + "\n" +
+        "}";
+    }
 }

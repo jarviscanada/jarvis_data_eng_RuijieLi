@@ -72,7 +72,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
     }
 
     // TODO
-    public Quote createNewQuote(Quote entity) {
+    public Quote createNew(Quote entity) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
             this.setInsertStatement(preparedStatement, entity);
             preparedStatement.execute();
@@ -102,7 +102,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
             throw new IllegalArgumentException();
         }
         boolean exists = this.findById(entity.getTicker()).isPresent();
-        return exists ? this.saveExisting(entity) : this.createNewQuote(entity); 
+        return exists ? this.saveExisting(entity) : this.createNew(entity); 
     }
 
     private Quote getQuoteFromRS(ResultSet rs) throws SQLException {
@@ -170,7 +170,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public void deleteAll() {
-        // throw new UnsupportedOperationException("Unimplemented method 'deleteAll'");
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE_ALL)) {
             preparedStatement.execute();
         } catch(SQLException e) {
