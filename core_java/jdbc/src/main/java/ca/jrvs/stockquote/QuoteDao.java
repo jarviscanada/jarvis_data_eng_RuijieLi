@@ -99,7 +99,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
     public Quote save(Quote entity) throws IllegalArgumentException {
         // throw new UnsupportedOperationException("Unimplemented method 'save'");
         if(entity == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Quote cannot be null");
         }
         boolean exists = this.findById(entity.getTicker()).isPresent();
         return exists ? this.saveExisting(entity) : this.createNew(entity); 

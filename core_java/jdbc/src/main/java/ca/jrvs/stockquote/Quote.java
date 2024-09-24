@@ -122,4 +122,18 @@ public class Quote {
         "   timestamp          :" + timestamp           + "\n" + 
         "}";
     }
+    public boolean equals(Quote quote) {
+        return 
+            this.ticker.equals(quote.ticker) &&
+            this.open == quote.open &&
+            this.high == quote.high &&
+            this.low == quote.low &&
+            this.price == quote.price &&
+            this.volume == quote.volume &&
+            this.latestTradingDay.equals(quote.latestTradingDay) &&
+            this.previousClose == quote.previousClose &&
+            this.change == quote.change &&
+            this.changePercent.equals(quote.changePercent) &&
+            this.timestamp.equals(quote.timestamp);
+    }
 }

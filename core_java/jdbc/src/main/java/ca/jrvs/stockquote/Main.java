@@ -27,6 +27,18 @@ public class Main {
         ford.setValuePaid(2000);
         positionDao.save(ford);
 
+        Position microsoft = new Position();
+        microsoft.setTicker("MSFT");
+        microsoft.setNumOfShares(10);
+        microsoft.setValuePaid(3425.23);
+        positionDao.save(microsoft);
+
+        // Position doge = new Position();
+        // doge.setTicker("DOGE");
+        // doge.setNumOfShares(1000);
+        // doge.setValuePaid(200);
+        // positionDao.save(doge);
+
         ArrayList<Position> positions = (ArrayList<Position>)positionDao.findAll();
         for(Position position:positions) {
             System.out.println(position);
