@@ -23,6 +23,12 @@ public class Position {
     public void setValuePaid(double valuePaid) {
         this.valuePaid = valuePaid;
     }
+    public boolean equals(Position position) {
+        return this.ticker.equals(position.ticker) &&
+            this.numOfShares == position.numOfShares &&
+            this.valuePaid == position.valuePaid;
+    }
+
     public String toString() {
         return "{\n" +
             "   ticker      : " + ticker        + "\n" +

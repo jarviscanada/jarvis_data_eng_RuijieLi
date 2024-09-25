@@ -68,7 +68,8 @@ public class PositionDao implements CrudDao<Position, String> {
         } catch (SQLException e) {
             logger.error("Error while creating value " + position, e);
             throw new RuntimeException(e);
-        }    }
+        }
+    }
 
     @Override
     public Position save(Position entity) throws IllegalArgumentException {
