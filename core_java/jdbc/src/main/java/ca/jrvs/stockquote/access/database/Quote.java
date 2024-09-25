@@ -1,4 +1,4 @@
-package ca.jrvs.stockquote;
+package ca.jrvs.stockquote.access.database;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -40,6 +40,8 @@ public class Quote {
 	private String changePercent;
 
 	private Timestamp timestamp; //time when the info was pulled
+
+    public Quote() {}
 
     public String getTicker() {
         return ticker;

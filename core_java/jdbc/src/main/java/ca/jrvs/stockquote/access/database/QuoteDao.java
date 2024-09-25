@@ -1,4 +1,4 @@
-package ca.jrvs.stockquote;
+package ca.jrvs.stockquote.access.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
         " symbol, open, high, low, price, volume, latest_trading_day, previous_close, change, change_percent, timestamp " +
         " FROM quote";
 
-    QuoteDao(Connection connection) {
+    public QuoteDao(Connection connection) {
         this.connection = connection;
         this.logger = LoggerFactory.getLogger(QuoteDao.class);
         BasicConfigurator.configure();

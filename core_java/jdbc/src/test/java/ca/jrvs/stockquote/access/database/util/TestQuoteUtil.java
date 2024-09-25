@@ -1,4 +1,4 @@
-package ca.jrvs.stockquote.util;
+package ca.jrvs.stockquote.access.database.util;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import ca.jrvs.stockquote.Quote;
+import ca.jrvs.stockquote.access.database.Quote;
 
 
 public class TestQuoteUtil {

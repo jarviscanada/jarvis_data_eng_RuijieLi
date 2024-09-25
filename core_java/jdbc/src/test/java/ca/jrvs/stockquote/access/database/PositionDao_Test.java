@@ -1,4 +1,4 @@
-package ca.jrvs.stockquote;
+package ca.jrvs.stockquote.access.database;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,13 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import ca.jrvs.stockquote.util.TestPositionUtil;
+import ca.jrvs.stockquote.access.database.util.TestPositionUtil;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class PositionDao_Test {
     PositionDao positionDao;
     Connection connection;
-
     @BeforeAll
     public void initConnection() throws SQLException {
         String pgUsername = System.getenv("PGUSERNAME");

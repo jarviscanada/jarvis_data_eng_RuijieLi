@@ -1,11 +1,11 @@
-package ca.jrvs.stockquote.util;
+package ca.jrvs.stockquote.access.database.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import ca.jrvs.stockquote.Position;
+import ca.jrvs.stockquote.access.database.Position;
 
 public class TestPositionUtil {
 

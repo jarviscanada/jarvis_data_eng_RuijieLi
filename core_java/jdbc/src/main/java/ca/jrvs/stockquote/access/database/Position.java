@@ -1,4 +1,4 @@
-package ca.jrvs.stockquote;
+package ca.jrvs.stockquote.access.database;
 
 public class Position {
 	private String ticker; //id
