@@ -24,7 +24,6 @@ public class DatabaseUtil {
         try {
             return DriverManager.getConnection(url, properties);
         } catch (SQLException e) {
-            // e.printStackTrace();
             logger.error("Error while connecting to database " + url + " with username " + userName, e);
             throw new RuntimeException(e);
         }

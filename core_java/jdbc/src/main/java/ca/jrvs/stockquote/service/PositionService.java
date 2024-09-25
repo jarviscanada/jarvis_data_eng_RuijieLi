@@ -12,15 +12,19 @@ public class PositionService {
     private QuoteDao quoteDao;
     private QuoteService quoteService;
 	
-    PositionService(PositionDao positionDao, QuoteDao quoteDao, QuoteService quoteService) {
+    public PositionService(PositionDao positionDao, QuoteDao quoteDao, QuoteService quoteService) {
         this.positionDao = positionDao;
         this.quoteDao = quoteDao;
         this.quoteService = quoteService;
     }
 
-    public Position buy(String ticker, int numberOfShares, double price) {
-		Optional<Quote> quoteToBuy = this.quoteDao.findById(ticker);
+    private Quote getQuote(String ticker) {
+        // get quote from database
+        Optional<Quote> quoteToBuy = this.quoteDao.findById(ticker);
+        // System.out.println(quoteToBuy.get());
+
         Quote quote = null;
+        // if not in DB, go get it from internet
         if(!quoteToBuy.isPresent()) {
             Optional<Quote> fetchedQuote = this.quoteService.fetchQuoteDataFromAPI(ticker);
             if(!fetchedQuote.isPresent()) {
@@ -28,25 +32,55 @@ public class PositionService {
             } else {
                 quote = fetchedQuote.get();
             }
+        } else {
+            quote = quoteToBuy.get();
         }
-        if(numberOfShares > quote.getVolume()) {
+        return quote;
+    }
+
+    public Position buy(String ticker, int numberOfShares, double price) {
+        Quote quoteToBuy = this.getQuote(ticker);
+
+        if(numberOfShares > quoteToBuy.getVolume()) {
             throw new RuntimeException("Cannot buy more than available volume");
         }
+        // save quote in DB
+        quoteToBuy.setVolume(quoteToBuy.getVolume() - numberOfShares);
+        quoteDao.save(quoteToBuy);
+
+        // Save the position
         Optional<Position> positionInDB = positionDao.findById(ticker);
         Position position = null;
-        quote.setVolume(quote.getVolume() - numberOfShares);
-        quoteDao.save(quote);
         if(!positionInDB.isPresent()) {
             position = new Position();
             position.setNumOfShares(numberOfShares);
-            position.setValuePaid(price);
+            position.setValuePaid(price * numberOfShares);
             position.setTicker(ticker);
         } else {
             position = positionInDB.get();
+            position.setNumOfShares(position.getNumOfShares() + numberOfShares);
+            position.setValuePaid(position.getValuePaid() + (price * numberOfShares));
         }
-        return null;
+        return positionDao.save(position);
 	}
+
     public Position sell(String ticker, int numberOfShares, double price) {
-        return null;
+
+        Optional<Position> positionFromDB = positionDao.findById(ticker);
+        if(!positionFromDB.isPresent()) {
+            throw new RuntimeException("Cannot sell " + ticker + ": cannot sell a position that is not owned");
+        }
+        if(positionFromDB.get().getNumOfShares() < numberOfShares) {
+            throw new RuntimeException("Cannot sell more than owned");
+        }
+        Position position = positionFromDB.get();
+        position.setNumOfShares(position.getNumOfShares() - numberOfShares);
+        position.setValuePaid(position.getValuePaid() - price * numberOfShares);
+
+        Quote quote = getQuote(ticker);
+        quote.setVolume(quote.getVolume() + numberOfShares);
+        quoteDao.save(quote);
+
+        return positionDao.save(position);
     }
 }

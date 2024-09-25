@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import ca.jrvs.stockquote.util.TestPositionUtil;
-import ca.jrvs.stockquote.util.TestQuoteUtil;
+import ca.jrvs.stockquote.access.database.util.TestPositionUtil;
+import ca.jrvs.stockquote.access.database.util.TestQuoteUtil;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class QuoteDao_Test {

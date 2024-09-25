@@ -41,7 +41,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
         BasicConfigurator.configure();
     }
 
-    // TODO
     private void setUpdateStatement(PreparedStatement preparedStatement, Quote quote) throws SQLException {
         preparedStatement.setDouble(1, quote.getOpen());
         preparedStatement.setDouble(2, quote.getHigh());
@@ -56,7 +55,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
         preparedStatement.setString(11, quote.getTicker());
     }
 
-    // TODO
     private void setInsertStatement(PreparedStatement preparedStatement, Quote quote) throws SQLException {
         preparedStatement.setString(1, quote.getTicker());
         preparedStatement.setDouble(2, quote.getOpen());
@@ -71,7 +69,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
         preparedStatement.setTimestamp(11, quote.getTimestamp());
     }
 
-    // TODO
     public Quote createNew(Quote entity) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
             this.setInsertStatement(preparedStatement, entity);
@@ -83,7 +80,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
         }
     }
 
-    // TODO
     public Quote saveExisting(Quote entity) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
             this.setUpdateStatement(preparedStatement, entity);
@@ -93,11 +89,9 @@ public class QuoteDao implements CrudDao<Quote, String> {
             logger.error("Error while updating value " + entity, e);
             throw new RuntimeException(e);
         }
-        // return null;
     }
     @Override
     public Quote save(Quote entity) throws IllegalArgumentException {
-        // throw new UnsupportedOperationException("Unimplemented method 'save'");
         if(entity == null) {
             throw new IllegalArgumentException("Quote cannot be null");
         }
@@ -107,7 +101,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     private Quote getQuoteFromRS(ResultSet rs) throws SQLException {
         Quote quote = new Quote();
-        // while(rs.next()) {
         quote.setTicker(            rs.getString(1)     );
         quote.setOpen(              rs.getDouble(2)     );
         quote.setHigh(              rs.getDouble(3)     );
@@ -119,13 +112,11 @@ public class QuoteDao implements CrudDao<Quote, String> {
         quote.setChange(            rs.getDouble(9)     );
         quote.setChangePercent(     rs.getString(10)    );
         quote.setTimestamp(         rs.getTimestamp(11) );
-        // }
         return quote;
     }
 
     @Override
     public Optional<Quote> findById(String id) throws IllegalArgumentException {
-        // throw new UnsupportedOperationException("Unimplemented method 'findById'");
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(FIND_BY_ID)) {
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -142,7 +133,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public Iterable<Quote> findAll() {
-        // throw new UnsupportedOperationException("Unimplemented method 'findAll'");
         ArrayList<Quote> quotes = new ArrayList<>();
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_ALL)) {
             ResultSet rs = preparedStatement.executeQuery();
@@ -158,7 +148,6 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public void deleteById(String id) throws IllegalArgumentException {
-        // throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE)) {
             preparedStatement.setString(1, id);
             preparedStatement.execute();
