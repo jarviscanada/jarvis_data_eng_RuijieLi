@@ -1,6 +1,6 @@
 # Rui Jie Li . Jarvis Consulting
 
- As someone who enjoys problem-solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis. In my free time, I'd sometimes go play badminton or basketball (not on a professional level, just for fun), and sometimes I'd go running.
+ As someone who enjoys problem solving and technical challenges, I am looking forward to contributing to your organization! I have a year of work experience in software development, both in frontend and backend, and a bachelor's degree in software engineering from Polytechnique Montréal. I have worked with JavaScript, TypeScript, Python, Java, and C++, on projects such as a telecommunication simulator, embedded C++, a drawing app, and computer vision for robots. I am also working at a tech consultancy on the side, aside from training at Jarvis. In my free time, I'd sometimes go play badminto or basketball (not on a profesional level, just for fun), and I enjoy cooking.
 
 ## Skills
 
@@ -39,11 +39,11 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](
 
 ## Professional Experiences
 
-**Junior Software Developer, Jarvis Consulting Group (2024-present)**: Training in various enterprise technologies such as SQL, Linux Bash, Maven, JDBC, and Java.
+**Junior Software Developer, Jarvis Consulting Group (2024-present)**: Training in various enterprise technologies such as SQL, Linux Bash, Maven, JDBC, and Java. So far, I have completed a resource monitoring app in Linux Bash, a SQL exercise project, and a Java regex matching app. Currently, I am working on a Java stock app to practice interacting with a database in Java (DAO, DTO, unit testing).
 
 **Data Analyst (contract part time), Ethos Metrics (2024-present)**: So far, I've completed a project on data migration from various formats (mostly Word and Excel) to Salesforce, using regex in Python and Excel to generate the import document. Currently, I am working on two projects: a document classification script with models on Hugging Face, and SEO optimization for their website (https://www.ethosmetrics.ca/)
 
-**Data Analyst, Fondation de Polytechnique (2023-2024)**: I implemented responsive design and improved the UI (fixing display and scrolling issues, and adding CSS transitions) of multiple web pages. Since most of the frontend was automatically generated with NetCommunity and I cannot modify the generated code, I've often had to come up with workarounds. I also made a tax credit estimation tool for the 2024 campaign and partially automated some data entry tasks.
+**Data Analyst, Fondation de Polytechnique (2023-2024)**: I implemented responsive design and improved the UI (fixing display and scrolling issues, and adding CSS transitions) of multiple web pages. Since most of the frontend was automatically generated with NetCommunity and I cannot modify the generated code, I've often had to come up with workarounds. I also made a tax credit estimation tool for the 2024 campaign (for example: https://soutien.polymtl.ca/campagne-annuelle-2024-25/jd/don-unique) and partially automated some data entry tasks.
 
 **Data management assistant, Fondation de Polytechnique (2021-2023)**: I was mostly working with Blackbaud products. I maintained and edited some web pages, partially automated some data entry tasks, and made a telemarketing tool that was used for a few months after Blackbaud removed theirs.
 
@@ -58,4 +58,3 @@ Project source code: [https://github.com/jarviscanada/jarvis_data_eng_RuijieLi](
 ## Miscellaneous
 - I like playing basketball and badminton, just for fun
 - For someone who just improvises with leftover and cheap ingredients, I'm pretty good at cooking (found out that Cheetos can melt in hot water and serve as spaghetti sauce thickener because me and my roommate didn't have flour)
-- I like making memes... And maybe I am good at it!
