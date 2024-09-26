@@ -18,7 +18,7 @@ public class Main {
         // PositionDao positionDao = new PositionDao(connection);
         QuoteDao quoteDao = new QuoteDao(connection);
         QuoteService quoteService = new QuoteService(quoteDao, helper);
-        Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI("TSLA");
+        Optional<Quote> quote = quoteService.fetchQuoteDataFromAPI("MSFT");
         System.out.println(quote.isPresent() ? quote.get() : null);
         // positionDao.deleteAll();
         // Position tsla = new Position();

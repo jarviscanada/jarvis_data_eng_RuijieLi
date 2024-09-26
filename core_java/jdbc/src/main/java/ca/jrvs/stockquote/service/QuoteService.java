@@ -22,7 +22,6 @@ public class QuoteService {
 	 */
 	public Optional<Quote> fetchQuoteDataFromAPI(String ticker) {
 		Quote quote = this.httpHelper.fetchQuoteInfo(ticker);
-
 		return quote == null ? Optional.empty() : Optional.of(this.dao.save(quote));
 	}
 }
