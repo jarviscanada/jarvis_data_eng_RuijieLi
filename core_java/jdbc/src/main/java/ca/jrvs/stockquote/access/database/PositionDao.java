@@ -31,7 +31,7 @@ public class PositionDao implements CrudDao<Position, String> {
 
     private Logger logger;
 
-    PositionDao(Connection connection) {
+    public PositionDao(Connection connection) {
         this.connection = connection;
         this.logger = LoggerFactory.getLogger(PositionDao.class);
         BasicConfigurator.configure();        

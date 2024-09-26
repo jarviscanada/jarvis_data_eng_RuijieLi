@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Connection;
-import java.sql.SQLClientInfoException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -15,9 +16,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import ca.jrvs.stockquote.access.database.DatabaseUtil;
+import ca.jrvs.stockquote.access.database.Quote;
 import ca.jrvs.stockquote.access.database.QuoteDao;
 import ca.jrvs.stockquote.access.database.util.TestPositionUtil;
-import ca.jrvs.stockquote.access.database.util.TestQuoteUtil;
 import ca.jrvs.stockquote.access.httpexternalapi.QuoteHttpHelper;
 
 
@@ -50,7 +51,15 @@ public class QuoteService_IntTest {
     public void testGetQuote_Null() {
         assertTrue(!this.quoteService.fetchQuoteDataFromAPI("DOGE").isPresent());
     }
+
     @Test
-    public void testGetQuote_Real() {
+    public void testGetQuote_Real() throws SQLException {
+        Quote tesla = this.quoteService.fetchQuoteDataFromAPI("TSLA").get();
+        assertEquals("TSLA", tesla.getTicker());
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM quote WHERE symbol='TSLA'");
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            assertEquals("TSLA", rs.getString(1));
+        }
     }
 }
