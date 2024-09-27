@@ -41,6 +41,13 @@ public class QuoteHttpHelper {
         this.client = new OkHttpClient();
     }
 
+    public QuoteHttpHelper(String apikey, OkHttpClient client) {
+        logger = LoggerFactory.getLogger(QuoteHttpHelper.class);
+        BasicConfigurator.configure();
+        this.apiKey = apikey;
+        this.client = client;
+    }
+
 	public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
         final String link = "https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json";
         HttpRequest request = HttpRequest.newBuilder()
