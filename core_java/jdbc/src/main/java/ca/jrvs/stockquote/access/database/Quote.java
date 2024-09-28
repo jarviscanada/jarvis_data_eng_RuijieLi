@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import ca.jrvs.stockquote.controller.StringUtil;
 /*
         : "TSLA",
         : "241.4900",
@@ -126,27 +128,9 @@ public class Quote {
         "   timestamp          :" + timestamp           + "\n" + 
         "}";
     }
-    public String toUserString() {
-        int max = -1;
-        String[] attrs = {
-            ticker.toString(),
-            open + "",
-            high + "",
-            low + "",
-            price + "",
-            volume + "",
-            latestTradingDay.toString(),
-            previousClose + "",
-            change + "",
-            changePercent.toString(),
-            timestamp.toString()
-        };
-        for(String attr:attrs) {
-            if(attr.length() > max) {
-                max = attr.length();
-            }
-        }
-        String[] attrNames = {
+
+    public String[] getAttributeTitles() {
+        String[] titles = {
             "Ticker",
             "Open",
             "High",
@@ -159,27 +143,32 @@ public class Quote {
             "Change %",
             "Last retrieved"
         };
-        for(String attrName:attrNames) {
-            if(attrName.length() > max) {
-                max = attrName.length();
-            }
-        }
-        List<String> sbTitles = new ArrayList<>();
-        List<String> sbValues = new ArrayList<>();
-        for(String attrName:attrNames) {
-            sbTitles.add(attrName + " ".repeat((max - attrName.length())));
-        }
-        String titles = "|" + String.join("|", sbTitles) + "|\n";
-
-        String separator = ("+" + "-".repeat(max)).repeat(attrNames.length) + "+\n";
-
-        for(String val:attrs) {
-            sbValues.add(val + " ".repeat((max - val.length())));
-        }
-        String values = "|" + String.join("|", sbValues) + "|\n";
-        
-        return titles + separator + values;
+        return titles;
     }
+    public String[] getAttributeValues() {
+        String[] values = {
+            ticker.toString(),
+            open + "",
+            high + "",
+            low + "",
+            price + "",
+            volume + "",
+            latestTradingDay.toString(),
+            previousClose + "",
+            change + "",
+            changePercent.toString(),
+            timestamp.toString()
+        };
+        return values;
+    }
+
+    public String toUserString() {
+        // int max = -1;
+        String[] values = this.getAttributeValues();
+        String[] titles = this.getAttributeTitles();
+        return StringUtil.toUserString(values, titles);
+    }
+
     public boolean equals(Quote quote) {
         return 
             this.ticker.equals(quote.ticker) &&

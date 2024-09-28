@@ -71,37 +71,37 @@ public class Main {
 
                 switch(option) {
                     case(UserActions.BUY_STOCK):
-
-                    System.out.print("Choose a stock: ");
-                    chosenStock = console.readLine();
-                    System.out.print("How many to buy: ");
-                    stockNumberString = console.readLine();
-                    stockNumber = Integer.parseInt(stockNumberString);
-
-                    controller.buy(chosenStock, stockNumber);
-                    break;
+                        System.out.print("Choose a stock: ");
+                        chosenStock = console.readLine();
+                        System.out.print("How many to buy: ");
+                        stockNumberString = console.readLine();
+                        stockNumber = Integer.parseInt(stockNumberString);
+                        controller.buy(chosenStock, stockNumber);
+                        break;
                     case(UserActions.SELL_STOCK):
-                    System.out.print("Choose a stock: ");
-                    chosenStock = console.readLine();
-                    System.out.print("How many to sell: ");
-                    stockNumberString = console.readLine();
-                    stockNumber = Integer.parseInt(stockNumberString);
-                    controller.sell(chosenStock, stockNumber);;
-                    break;
+                        System.out.print("Choose a stock: ");
+                        chosenStock = console.readLine();
+                        System.out.print("How many to sell: ");
+                        stockNumberString = console.readLine();
+                        stockNumber = Integer.parseInt(stockNumberString);
+                        controller.sell(chosenStock, stockNumber);;
+                        break;
                     case(UserActions.DISPLAY_STOCK):
-                    System.out.print("Choose a stock: ");
-                    chosenStock = console.readLine();
-                    controller.displayStock(chosenStock);
-                    break;
+                        System.out.print("Choose a stock: ");
+                        chosenStock = console.readLine();
+                        controller.displayStock(chosenStock);
+                        break;
                     case(UserActions.DISPLAY_POSITION):
-                    controller.displayPosition();
-                    break;
+                        System.out.print("Choose a stock: ");
+                        chosenStock = console.readLine();
+                        controller.displayPosition(chosenStock);
+                        break;
                     case(UserActions.DISPLAY_ALL_POSITION):
-                    controller.displayAllPositions();
-                    break;
+                        controller.displayAllPositions();
+                        break;
                     default:
-                    System.out.println("Please choose a valid option");
-                    break;
+                        System.out.println("Please choose a valid option");
+                        break;
                 }
             }
 

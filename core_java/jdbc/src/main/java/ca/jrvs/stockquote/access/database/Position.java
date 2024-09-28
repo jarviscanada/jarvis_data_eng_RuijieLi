@@ -1,9 +1,19 @@
 package ca.jrvs.stockquote.access.database;
 
+import ca.jrvs.stockquote.controller.StringUtil;
+
 public class Position {
     private String ticker; //id
     private int numOfShares;
     private double valuePaid; //total amount paid for shares
+    private double currentValue;
+
+    public double getCurrentValue() {
+        return currentValue;
+    }
+    public void setCurrentValue(double currentValue) {
+        this.currentValue = currentValue;
+    }
 
     public String getTicker() {
         return ticker;
@@ -35,5 +45,30 @@ public class Position {
             "   numOfShares : " + numOfShares   + "\n" +
             "   valuePaid   : " + valuePaid     + "\n" +
         "}";
+    }
+    public static String[] getAttributeTitles() {
+        String[] titles = {
+            "Ticker",
+            "# of shares",
+            "Value paid",
+            "Current value"
+        };
+        return titles;
+    }
+
+    public String[] getAttributeValues() {
+        String[] values = {
+            ticker,
+            numOfShares + "",
+            valuePaid + "",
+            currentValue + ""
+        };
+        return values;
+    }
+
+    public String toUserString() {
+        String[] titles = this.getAttributeTitles();
+        String[] values = this.getAttributeValues();
+        return StringUtil.toUserString(values, titles);
     }
 }

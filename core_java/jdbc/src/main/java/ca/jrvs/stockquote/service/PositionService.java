@@ -84,7 +84,9 @@ public class PositionService {
             position.setNumOfShares(position.getNumOfShares() + numberOfShares);
             position.setValuePaid(position.getValuePaid() + (price * numberOfShares));
         }
-        return positionDao.save(position);
+        Position positionToReturn = positionDao.save(position);
+        positionToReturn.setCurrentValue((double)Math.round(price * positionToReturn.getNumOfShares() * 100.00) / 100);
+        return positionToReturn;
     }
 
     public Position sell(String ticker, int numberOfShares, double price) {
@@ -104,6 +106,26 @@ public class PositionService {
         quote.setVolume(quote.getVolume() + numberOfShares);
         quoteDao.save(quote);
 
-        return positionDao.save(position);
+        Position positionToReturn = positionDao.save(position);
+        positionToReturn.setCurrentValue((double)Math.round(price * positionToReturn.getNumOfShares() * 100.00) / 100);
+        return positionToReturn;
+    }
+
+    public Optional<Position> find(String id) {
+        Optional<Position> positionWrapper = this.positionDao.findById(id);
+        if(positionWrapper.isPresent()) {
+            Quote quote = this.getQuote(id);
+            positionWrapper.get().setCurrentValue((double)Math.round(quote.getPrice() * positionWrapper.get().getNumOfShares() * 100.00) / 100);
+        }
+        return positionWrapper;
+    }
+
+    public List<Position> findAll() {
+        List<Position> positions = (ArrayList<Position>)positionDao.findAll();
+        for(Position position:positions) {
+            Quote quote = getQuote(position.getTicker());
+            position.setCurrentValue((double)Math.round(position.getNumOfShares() * quote.getPrice() * 100) / 100);
+        }
+        return positions;
     }
 }

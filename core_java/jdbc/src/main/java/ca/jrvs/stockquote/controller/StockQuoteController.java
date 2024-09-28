@@ -1,5 +1,6 @@
 package ca.jrvs.stockquote.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +34,26 @@ public class StockQuoteController {
         }
     }
 
-    public void displayPosition() {
-
+    public void displayPosition(String chosenStock) {
+        Optional<Position> positionWrapper = positionService.find(chosenStock);
+        Optional<Quote> quoteWrapper = quoteService.fetch(chosenStock);
+        if(positionWrapper.isPresent()) {
+            Position position = positionWrapper.get();
+            Quote quote = quoteWrapper.get();
+            position.setCurrentValue((double)Math.round(quote.getPrice() * position.getNumOfShares()* 100) / 100 );
+            System.out.println(position.toUserString());
+        } else {
+            System.out.println("You do not own " + chosenStock + " yet.");
+        }
     }
 
     public void displayAllPositions() {
-
+        List<Position> positions = positionService.findAll();
+        List<String[]> values = new ArrayList<>();
+        for(Position position:positions) {
+            values.add(position.getAttributeValues());
+        }
+        System.out.println(StringUtil.toUserString(values, Position.getAttributeTitles()));
     }
 
     public void buy(String chosenStock, int stockNumber) {
@@ -55,7 +70,8 @@ public class StockQuoteController {
         try {
             Position position = this.positionService.buy(chosenStock, stockNumber, quote.get().getPrice());
             System.out.println("You have successfully bought " + stockNumber + " of " + chosenStock + ". Your position is now ");
-            System.out.println(position);
+
+            System.out.println(position.toUserString());
         } catch(RuntimeException e) {
             if(e.getMessage() == null) {
                 System.out.println("An unknown error has occured: " + e.getCause());
