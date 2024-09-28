@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class QuoteDao implements CrudDao<Quote, String> {
 
-	private Connection connection;
+    private Connection connection;
 
     private Logger logger;
     private static final String FIND_BY_ID = "SELECT" +

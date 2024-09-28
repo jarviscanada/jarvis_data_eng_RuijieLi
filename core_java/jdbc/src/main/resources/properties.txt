@@ -1,7 +1,7 @@
 db-class:org.postgresql.Driver
 server:localhost
-database:host_agent
+database:stock_quote
 port:5432
 username:postgres
 password:password
-api-key-path:~/Desktop/jarvis_api_key
+api-key-path:/home/ruijieli/Desktop/jrvs_api_key

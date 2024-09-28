@@ -1,9 +1,9 @@
 package ca.jrvs.stockquote.access.database;
 
 public class Position {
-	private String ticker; //id
-	private int numOfShares;
-	private double valuePaid; //total amount paid for shares
+    private String ticker; //id
+    private int numOfShares;
+    private double valuePaid; //total amount paid for shares
 
     public String getTicker() {
         return ticker;

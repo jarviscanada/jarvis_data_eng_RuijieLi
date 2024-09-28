@@ -1,5 +1,8 @@
 package ca.jrvs.stockquote.service;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import ca.jrvs.stockquote.access.database.Position;
@@ -11,11 +14,31 @@ public class PositionService {
     private PositionDao positionDao;
     private QuoteDao quoteDao;
     private QuoteService quoteService;
-	
+    
     public PositionService(PositionDao positionDao, QuoteDao quoteDao, QuoteService quoteService) {
         this.positionDao = positionDao;
         this.quoteDao = quoteDao;
         this.quoteService = quoteService;
+    }
+
+    public void updateAll() {
+        List<Position> positions = (ArrayList<Position>)this.positionDao.findAll();
+        for(Position position:positions) {
+            System.out.println("Updating " + position.getTicker());
+            Optional<Quote> quote = this.quoteService.fetchQuoteDataFromAPI(position.getTicker());
+            if(quote.isPresent()) {
+                System.out.println("Updated stock " + quote.get().getTicker());
+            } else {
+                System.out.println("update " + position.getTicker() + " failed");
+            }
+        }
+    }
+
+    public static String getTickerNotPresentMsg(String ticker) {
+        return "Ticker " + ticker + " does not exist";
+    }
+    public static String getTooManyVolumeMsg() {
+        return "Cannot buy more than available volume";
     }
 
     private Quote getQuote(String ticker) {
@@ -28,7 +51,7 @@ public class PositionService {
         if(!quoteToBuy.isPresent()) {
             Optional<Quote> fetchedQuote = this.quoteService.fetchQuoteDataFromAPI(ticker);
             if(!fetchedQuote.isPresent()) {
-                throw new RuntimeException("Ticker " + ticker + " does not exist");
+                throw new RuntimeException(getTickerNotPresentMsg(ticker));
             } else {
                 quote = fetchedQuote.get();
             }
@@ -42,7 +65,7 @@ public class PositionService {
         Quote quoteToBuy = this.getQuote(ticker);
 
         if(numberOfShares > quoteToBuy.getVolume()) {
-            throw new RuntimeException("Cannot buy more than available volume");
+            throw new RuntimeException(getTooManyVolumeMsg());
         }
         // save quote in DB
         quoteToBuy.setVolume(quoteToBuy.getVolume() - numberOfShares);
@@ -62,7 +85,7 @@ public class PositionService {
             position.setValuePaid(position.getValuePaid() + (price * numberOfShares));
         }
         return positionDao.save(position);
-	}
+    }
 
     public Position sell(String ticker, int numberOfShares, double price) {
 

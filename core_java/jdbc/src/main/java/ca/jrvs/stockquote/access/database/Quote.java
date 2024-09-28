@@ -2,6 +2,8 @@ package ca.jrvs.stockquote.access.database;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 /*
@@ -19,27 +21,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Quote {
 
     @JsonProperty("01. symbol")
-	private String ticker; //id
+    private String ticker; //id
     @JsonProperty("02. open")
     private double open;
     @JsonProperty("03. high")
-	private double high;
+    private double high;
     @JsonProperty("04. low")
-	private double low;
+    private double low;
     @JsonProperty("05. price")
-	private double price;
+    private double price;
     @JsonProperty("06. volume")
-	private int volume;
+    private int volume;
     @JsonProperty("07. latest trading day")
-	private Date latestTradingDay;
+    private Date latestTradingDay;
     @JsonProperty("08. previous close")
-	private double previousClose;
+    private double previousClose;
     @JsonProperty("09. change")
-	private double change;
+    private double change;
     @JsonProperty("10. change percent")
-	private String changePercent;
+    private String changePercent;
 
-	private Timestamp timestamp; //time when the info was pulled
+    private Timestamp timestamp; //time when the info was pulled
 
     public Quote() {}
 
@@ -123,6 +125,60 @@ public class Quote {
         "   changePercent      :" + changePercent       + "\n" +
         "   timestamp          :" + timestamp           + "\n" + 
         "}";
+    }
+    public String toUserString() {
+        int max = -1;
+        String[] attrs = {
+            ticker.toString(),
+            open + "",
+            high + "",
+            low + "",
+            price + "",
+            volume + "",
+            latestTradingDay.toString(),
+            previousClose + "",
+            change + "",
+            changePercent.toString(),
+            timestamp.toString()
+        };
+        for(String attr:attrs) {
+            if(attr.length() > max) {
+                max = attr.length();
+            }
+        }
+        String[] attrNames = {
+            "Ticker",
+            "Open",
+            "High",
+            "Low",
+            "Price",
+            "Volume",
+            "Latest trading day",
+            "Previous close",
+            "Change",
+            "Change %",
+            "Last retrieved"
+        };
+        for(String attrName:attrNames) {
+            if(attrName.length() > max) {
+                max = attrName.length();
+            }
+        }
+        List<String> sbTitles = new ArrayList<>();
+        List<String> sbValues = new ArrayList<>();
+        for(String attrName:attrNames) {
+            sbTitles.add(attrName + " ".repeat((max - attrName.length())));
+        }
+        String titles = "|" + String.join("|", sbTitles) + "|\n";
+
+        String separator = ("+" + "-".repeat(max)).repeat(attrNames.length) + "+\n";
+
+        for(String val:attrs) {
+            sbValues.add(val + " ".repeat((max - val.length())));
+        }
+        String values = "|" + String.join("|", sbValues) + "|\n";
+        
+        return titles + separator + values;
     }
     public boolean equals(Quote quote) {
         return 

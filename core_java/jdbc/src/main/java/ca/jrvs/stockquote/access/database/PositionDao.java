@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class PositionDao implements CrudDao<Position, String> {
 
-	private Connection connection;
+    private Connection connection;
     private static final String INSERT_INTO = "INSERT INTO position " + 
         " (symbol, number_of_shares, value_paid) " +
         "VALUES (?, ?, ?);";

@@ -48,7 +48,7 @@ public class QuoteHttpHelper {
         this.client = client;
     }
 
-	public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
+    public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
         final String link = "https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json";
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(link))
