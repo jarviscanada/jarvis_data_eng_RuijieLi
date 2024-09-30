@@ -9,6 +9,10 @@ import ca.jrvs.stockquote.access.database.Position;
 import ca.jrvs.stockquote.access.database.PositionDao;
 import ca.jrvs.stockquote.access.database.Quote;
 import ca.jrvs.stockquote.access.database.QuoteDao;
+import ca.jrvs.stockquote.service.exceptions.InvalidTickerException;
+import ca.jrvs.stockquote.service.exceptions.SellMoreThanOwnedException;
+import ca.jrvs.stockquote.service.exceptions.TickerNotOwnedException;
+import ca.jrvs.stockquote.service.exceptions.TooManyVolumesException;
 
 public class PositionService {
     private PositionDao positionDao;
@@ -21,25 +25,12 @@ public class PositionService {
         this.quoteService = quoteService;
     }
 
-    public void updateAll() {
-        List<Position> positions = (ArrayList<Position>)this.positionDao.findAll();
-        for(Position position:positions) {
-            System.out.println("Updating " + position.getTicker());
-            Optional<Quote> quote = this.quoteService.fetchQuoteDataFromAPI(position.getTicker());
-            if(quote.isPresent()) {
-                System.out.println("Updated stock " + quote.get().getTicker());
-            } else {
-                System.out.println("update " + position.getTicker() + " failed");
-            }
-        }
-    }
-
-    public static String getTickerNotPresentMsg(String ticker) {
-        return "Ticker " + ticker + " does not exist";
-    }
-    public static String getTooManyVolumeMsg() {
-        return "Cannot buy more than available volume";
-    }
+    // public static String getTickerNotPresentMsg(String ticker) {
+    //     return "Ticker " + ticker + " does not exist";
+    // }
+    // public static String getTooManyVolumeMsg() {
+    //     return "Cannot buy more than available volume";
+    // }
 
     private Quote getQuote(String ticker) {
         // get quote from database
@@ -51,7 +42,7 @@ public class PositionService {
         if(!quoteToBuy.isPresent()) {
             Optional<Quote> fetchedQuote = this.quoteService.fetchQuoteDataFromAPI(ticker);
             if(!fetchedQuote.isPresent()) {
-                throw new RuntimeException(getTickerNotPresentMsg(ticker));
+                throw new InvalidTickerException("Ticker " + ticker + " doest not exist");
             } else {
                 quote = fetchedQuote.get();
             }
@@ -65,7 +56,7 @@ public class PositionService {
         Quote quoteToBuy = this.getQuote(ticker);
 
         if(numberOfShares > quoteToBuy.getVolume()) {
-            throw new RuntimeException(getTooManyVolumeMsg());
+            throw new TooManyVolumesException();
         }
         // save quote in DB
         quoteToBuy.setVolume(quoteToBuy.getVolume() - numberOfShares);
@@ -93,10 +84,10 @@ public class PositionService {
 
         Optional<Position> positionFromDB = positionDao.findById(ticker);
         if(!positionFromDB.isPresent()) {
-            throw new RuntimeException("Cannot sell " + ticker + ": cannot sell a position that is not owned");
+            throw new TickerNotOwnedException("Cannot sell " + ticker + ": cannot sell a position that is not owned");
         }
         if(positionFromDB.get().getNumOfShares() < numberOfShares) {
-            throw new RuntimeException("Cannot sell more than owned");
+            throw new SellMoreThanOwnedException();
         }
         Position position = positionFromDB.get();
         position.setNumOfShares(position.getNumOfShares() - numberOfShares);

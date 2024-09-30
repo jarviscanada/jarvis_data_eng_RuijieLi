@@ -129,7 +129,7 @@ public class Quote {
         "}";
     }
 
-    public String[] getAttributeTitles() {
+    public static String[] getAttributeTitles() {
         String[] titles = {
             "Ticker",
             "Open",

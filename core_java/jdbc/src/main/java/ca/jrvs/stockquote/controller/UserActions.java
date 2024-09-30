@@ -7,4 +7,7 @@ public class UserActions {
     public static final String DISPLAY_POSITION             = "DP";
     public static final String DISPLAY_ALL_POSITION         = "AP";
     public static final String DISPLAY_ALL_STOCKS_IN_DB     = "AS";
+    public static final String QUIT                         = "Q";
+    public static final String CLEAR                        = "C";
+
 }

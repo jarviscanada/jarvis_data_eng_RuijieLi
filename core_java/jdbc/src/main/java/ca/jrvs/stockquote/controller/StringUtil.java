@@ -25,7 +25,7 @@ public class StringUtil {
 
     public static String toUserString(List<String[]> values, String[] titles) {
         List<Integer> maxLengths = new ArrayList<>();
-
+        // maximum lengths for each field
         for(int j = 0; j < values.get(0).length; j++) {
             int maxLen = -1;
             for(int i = 0; i < values.size(); i++) {
@@ -44,7 +44,7 @@ public class StringUtil {
 
         List<String> titlesToPrint = new ArrayList<>();
         for(int i = 0; i < titles.length; i++) {
-            titlesToPrint.add(titles[i] + " ".repeat(maxLengths.get(i)));
+            titlesToPrint.add(titles[i] + " ".repeat(maxLengths.get(i) - titles[i].length()));
         }
         List<String> finalStrings = new ArrayList<>();
         String titleString = "|" + String.join("|", titlesToPrint) + "|";
@@ -56,7 +56,7 @@ public class StringUtil {
         for(String[] valuesOfOneObj: values) {
             List<String> valuesToPrint = new ArrayList<>();
             for(int i = 0; i < valuesOfOneObj.length; i++) {
-                valuesToPrint.add(valuesOfOneObj[i] + " ".repeat(maxLengths.get(i)));
+                valuesToPrint.add(valuesOfOneObj[i] + " ".repeat(maxLengths.get(i) - valuesOfOneObj[i].length()));
             }
             String row = "|" + String.join("|", valuesToPrint) + "|";
             finalStrings.add(row);

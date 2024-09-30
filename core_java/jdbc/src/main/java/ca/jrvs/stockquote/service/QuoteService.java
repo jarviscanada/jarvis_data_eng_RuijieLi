@@ -1,5 +1,6 @@
 package ca.jrvs.stockquote.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import ca.jrvs.stockquote.access.database.Quote;
@@ -32,5 +33,22 @@ public class QuoteService {
     public Optional<Quote> fetch(String ticker) {
         Optional<Quote> quote = this.fetchFromDB(ticker);
         return quote.isPresent() ? quote : this.fetchQuoteDataFromAPI(ticker);
+    }
+
+    public List<Quote> fetchAll() {
+        return (List<Quote>)dao.findAll();
+    }
+
+    public void updateAll() {
+        List<Quote> quotes = this.fetchAll();
+        for(Quote quote: quotes) {
+            System.out.println("Updating: " + quote.getTicker() + " (last updated: " + quote.getTimestamp() + " )");
+            Optional<Quote> updated = this.fetchQuoteDataFromAPI(quote.getTicker());
+            if(updated.isPresent()) {
+                System.out.println("Updated: " + updated.get().getTicker() + " (last updated: " + updated.get().getTimestamp() + " )");
+            } else {
+                System.out.println("Updating " + quote.getTicker() + " failed");
+            }
+        }
     }
 }
