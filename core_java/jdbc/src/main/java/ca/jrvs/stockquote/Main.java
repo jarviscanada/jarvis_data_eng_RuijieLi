@@ -37,7 +37,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         try {
             Class.forName(properties.get("db-class"));
         } catch (ClassNotFoundException e) {
@@ -62,7 +62,7 @@ public class Main {
             QuoteService sQuote = new QuoteService(qRepo, rcon);
             PositionService sPos = new PositionService(pRepo, qRepo, sQuote);
             StockQuoteController controller = new StockQuoteController(sQuote, sPos);
-            // controller.initClient();
+            controller.initClient();
             Console console = System.console();
             
             while(true) {
