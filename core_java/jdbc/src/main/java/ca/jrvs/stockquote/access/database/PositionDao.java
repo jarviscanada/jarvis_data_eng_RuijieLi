@@ -6,10 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
+import org.apache.log4j.Logger;
 
-import org.apache.log4j.BasicConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ca.jrvs.stockquote.util.StackTraceUtil;
 
 public class PositionDao implements CrudDao<Position, String> {
 
@@ -29,18 +28,34 @@ public class PositionDao implements CrudDao<Position, String> {
         "  symbol, number_of_shares, value_paid " +
         " FROM position";
 
-    private Logger logger;
+    private static Logger logger;
 
     public PositionDao(Connection connection) {
         this.connection = connection;
-        this.logger = LoggerFactory.getLogger(PositionDao.class);
-        BasicConfigurator.configure();        
+        logger = Logger.getLogger(PositionDao.class);
+        logger.info("Position DAO initiazlied");
     }
 
     public void setUpdateStatement(PreparedStatement preparedStatement, Position position) throws SQLException {
         preparedStatement.setInt(1, position.getNumOfShares());
         preparedStatement.setDouble(2, position.getValuePaid());
         preparedStatement.setString(3, position.getTicker());
+    }
+
+    private static void logUpdateStatement(Position position) {
+        String s = String.format(
+            "UPDATE position SET " + 
+            "number_of_shares = %d, value_paid = %f " + 
+            "WHERE symbol = %s", position.getNumOfShares(), position.getValuePaid(), position.getTicker());
+        logger.info("Executing query: " + s);
+    }
+
+    private static void logInsertStatement(Position position) {
+        String s = String.format(
+            "INSERT INTO position "
+            + " (symbol, number_of_shares, value_paid) "
+            + "VALUES (%s, %d, %f);", position.getTicker(), position.getNumOfShares(), position.getValuePaid());
+        logger.info("Executing query: " + s);
     }
 
     public void setInsertStatement(PreparedStatement preparedStatement, Position position) throws SQLException {
@@ -50,17 +65,19 @@ public class PositionDao implements CrudDao<Position, String> {
     }
 
     public Position saveExisting(Position position) {
+        logUpdateStatement(position);
         try(PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
             this.setUpdateStatement(preparedStatement, position);
             preparedStatement.execute();
             return this.findById(position.getTicker()).get();
         } catch (SQLException e) {
-            logger.error("Error while updating value " + position, e);
+            logger.error("Error while updating value " + position + ":\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
     
     public Position createNew(Position position) {
+        logInsertStatement(position);
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
             this.setInsertStatement(preparedStatement, position);
             preparedStatement.execute();
@@ -92,6 +109,7 @@ public class PositionDao implements CrudDao<Position, String> {
     @Override
     public Optional<Position> findById(String id) throws IllegalArgumentException {
         // throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        logger.info("Executing query: SELECT symbol, number_of_shares, value_paid FROM position WHERE symbol='" + id + "';");
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(FIND_BY_ID)) {
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -99,46 +117,50 @@ public class PositionDao implements CrudDao<Position, String> {
             while(rs.next()) {
                 position = this.getPositionFromRS(rs);
             }
+            logger.info(position == null ? 0 : 1 + " position found");
             return position == null ? Optional.empty() : Optional.of(position);
         } catch(SQLException e) {
-            logger.error("Error while finding position with ID " + id, e);
+            logger.error("Error while finding position with ID " + id + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public Iterable<Position> findAll() {
-        // throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        logger.info("Excuting query: " + SELECT_ALL);
         ArrayList<Position> positions = new ArrayList<>();
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_ALL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()) {
                 positions.add(this.getPositionFromRS(rs));
             }
+            logger.info(positions.size() + " positions found");
             return positions;
         } catch(SQLException e) {
-            logger.error("Error while selecting all", e);
+            logger.error("Error while selecting all\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteById(String id) throws IllegalArgumentException {
+        logger.info("Excecuting query: DELETE FROM position WHERE symbol='" + id + "';");
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE)) {
             preparedStatement.setString(1, id);
             preparedStatement.execute();
         } catch(SQLException e) {
-            logger.error("Error while deleting position with id " + id, e);
+            logger.error("Error while deleting position with id " + id + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteAll() {
+        logger.info("Executing query: " + DELETE_ALL);
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE_ALL)) {
             preparedStatement.execute();
         } catch(SQLException e) {
-            logger.error("Error while deleting all positions", e);
+            logger.error("Error while deleting all positions\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }

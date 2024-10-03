@@ -152,7 +152,7 @@ public class Quote {
     public String toUserString() {
         // int max = -1;
         String[] values = this.getAttributeValues();
-        String[] titles = Position.getAttributeTitles();
+        String[] titles = Quote.getAttributeTitles();
         return StringUtil.toUserString(values, titles);
     }
 

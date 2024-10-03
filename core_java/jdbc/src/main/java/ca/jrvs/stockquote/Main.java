@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import ca.jrvs.stockquote.access.database.PositionDao;
 import ca.jrvs.stockquote.access.database.QuoteDao;
 import ca.jrvs.stockquote.access.httpexternalapi.QuoteHttpHelper;
@@ -24,29 +27,36 @@ import ca.jrvs.stockquote.service.QuoteService;
 import okhttp3.OkHttpClient;
 
 public class Main {
-    public static void main(String[] args) {        
+    static Logger logger = Logger.getLogger(Main.class);
+    public static void main(String[] args) {
+        PropertyConfigurator.configure("src/main/resources/log4j.properties");
+        logger.info("======= Program started =======");
         Map<String, String> properties = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/properties.txt"))) {
+        final String databasePrameters = "src/main/resources/properties.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(databasePrameters))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.split(":");
                 properties.put(tokens[0], tokens[1]);
             }
+            logger.info("Finished reading " + databasePrameters);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Error: file not found exception" + e.getMessage());
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IO Exception " + e.getMessage());
+            throw new RuntimeException(e);            
         }
 
-        try {
-            Class.forName(properties.get("db-class"));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     Class.forName(properties.get("db-class"));
+        // } catch (ClassNotFoundException e) {
+        //     e.printStackTrace();
+        // }
 
         OkHttpClient client = new OkHttpClient();
         String url = "jdbc:postgresql://"+properties.get("server")+":"+properties.get("port")+"/"+properties.get("database");
-
+        logger.info("Database initialized to" + url);
         try (Connection c = DriverManager.getConnection(url, properties.get("username"), properties.get("password"))) {
             System.out.println("######################################################################################");
             System.out.println("#                           Welcome to the stock quote app                           #");
@@ -70,7 +80,7 @@ public class Main {
                 System.out.println("Choose which action: ");
                 System.out.println( UserActions.SELL_STOCK                  + " : Sell stock           " 
                                     + UserActions.BUY_STOCK                 + " : Buy stock            "
-                                    + UserActions.DISPLAY_STOCK             + ": Display specific position   ");
+                                    + UserActions.DISPLAY_POSITION          + ": Display specific position   ");
                 System.out.println( UserActions.QUIT                        + " : Quit program         "
                                     + UserActions.CLEAR                     + " : Clear Console        " 
                                     + UserActions.DISPLAY_STOCK             + ": Display specific stock      ");
@@ -89,6 +99,7 @@ public class Main {
                         chosenStock = console.readLine();
                         System.out.print("How many to buy: ");
                         stockNumberString = console.readLine();
+                        logger.info("User chose option: BUY" + stockNumberString + " units of " + chosenStock);
                         stockNumber = Integer.parseInt(stockNumberString);
                         controller.buy(chosenStock, stockNumber);
                         break;
@@ -97,40 +108,49 @@ public class Main {
                         chosenStock = console.readLine();
                         System.out.print("How many to sell: ");
                         stockNumberString = console.readLine();
+                        logger.info("User chose option: SELL " + stockNumberString + " units of " + chosenStock);
                         stockNumber = Integer.parseInt(stockNumberString);
                         controller.sell(chosenStock, stockNumber);;
                         break;
                     case(UserActions.DISPLAY_STOCK):
                         System.out.print("Choose a stock: ");
                         chosenStock = console.readLine();
+                        logger.info("User chose option: DISPLAY STOCK " + chosenStock);
                         controller.displayStock(chosenStock);
                         break;
                     case(UserActions.DISPLAY_POSITION):
                         System.out.print("Choose a stock: ");
                         chosenStock = console.readLine();
+                        logger.info("User chose option: DISPLAY POSITION " + chosenStock);
                         controller.displayPosition(chosenStock);
                         break;
                     case(UserActions.DISPLAY_ALL_POSITION):
+                        logger.info("User chose option: DISPLAY ALL POSITIONS");
                         controller.displayAllPositions();
                         break;
                     case(UserActions.DISPLAY_ALL_STOCKS_IN_DB):
+                        logger.info("User chose option: DISPLAY ALL STOCKS IN THE DATABASE");
                         controller.displayAllStocksInDB();
                         break;
                     case(UserActions.QUIT):
+                        logger.info("User chose: QUIT program");
                         System.exit(0);
                         break;
                     case(UserActions.CLEAR):
+                        logger.info("User chose: CLEAR console");
                         controller.clear();
                         break;
                     default:
+                        logger.info("User chose: invalid option " + option);
                         System.out.println("Please choose a valid option");
                         break;
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQL Exception: " + e.getCause() + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            logger.error("Error exception: " + e.getCause() + e.getMessage());
         }
     }
 }

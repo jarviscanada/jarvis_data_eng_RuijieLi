@@ -7,15 +7,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.apache.log4j.BasicConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
+import ca.jrvs.stockquote.util.StackTraceUtil;
+
+// import org.slf4j.LoggerFactory;
 
 public class QuoteDao implements CrudDao<Quote, String> {
 
     private Connection connection;
 
-    private Logger logger;
+    private static Logger logger;
     private static final String FIND_BY_ID = "SELECT" +
         " symbol, open, high, low, price, volume, latest_trading_day, previous_close, change, change_percent, timestamp " +
         "FROM quote WHERE symbol = ?";
@@ -37,8 +39,9 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     public QuoteDao(Connection connection) {
         this.connection = connection;
-        this.logger = LoggerFactory.getLogger(QuoteDao.class);
-        BasicConfigurator.configure();
+        logger = Logger.getLogger(QuoteDao.class);
+        logger.info("QuoteDao initialized");
+        // BasicConfigurator.configure();
     }
 
     private void setUpdateStatement(PreparedStatement preparedStatement, Quote quote) throws SQLException {
@@ -69,34 +72,70 @@ public class QuoteDao implements CrudDao<Quote, String> {
         preparedStatement.setTimestamp(11, quote.getTimestamp());
     }
 
-    public Quote createNew(Quote entity) {
+    private static void logUpdateStatement(Quote quote) {
+        logger.info("Excecuting query: " + String.format(UPDATE.replaceAll("\\?", "%s"),
+            quote.getOpen() + "",
+            quote.getHigh() + "",
+            quote.getLow() + "",
+            quote.getPrice() + "",
+            quote.getVolume() + "",
+            quote.getLatestTradingDay() + "",
+            quote.getPreviousClose() + "",
+            quote.getChange() + "",
+            quote.getChangePercent() + "",
+            quote.getTimestamp() + "",
+            quote.getTicker() + ""
+        ));
+    }
+
+    private static void logInsertStatement(Quote quote) {
+        logger.info("Excecuting query: " + String.format(INSERT_INTO.replaceAll("\\?", "%s"),
+            quote.getTicker() + "",
+            quote.getOpen() + "",
+            quote.getHigh() + "",
+            quote.getLow() + "",
+            quote.getPrice() + "",
+            quote.getVolume() + "",
+            quote.getLatestTradingDay() + "",
+            quote.getPreviousClose() + "",
+            quote.getChange() + "",
+            quote.getChangePercent() + "",
+            quote.getTimestamp() + ""
+        ));
+    }
+
+    public Quote createNew(Quote quote) {
+        logInsertStatement(quote);
         try(PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO)) {
-            this.setInsertStatement(preparedStatement, entity);
+            this.setInsertStatement(preparedStatement, quote);
             preparedStatement.execute();
-            return this.findById(entity.getTicker()).get();
+            return this.findById(quote.getTicker()).get();
         } catch (SQLException e) {
-            logger.error("Error while inserting new value " + entity, e);
+            logger.error("Error while inserting new value " + quote + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
-    public Quote saveExisting(Quote entity) {
+    public Quote saveExisting(Quote quote) {
+        logUpdateStatement(quote);
         try(PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
-            this.setUpdateStatement(preparedStatement, entity);
+            this.setUpdateStatement(preparedStatement, quote);
             preparedStatement.execute();
-            return this.findById(entity.getTicker()).get();
+            return this.findById(quote.getTicker()).get();
         } catch (SQLException e) {
-            logger.error("Error while updating value " + entity, e);
+            logger.error("Error while updating value " + quote.getTicker() + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
     @Override
-    public Quote save(Quote entity) throws IllegalArgumentException {
-        if(entity == null) {
+    public Quote save(Quote quote) throws IllegalArgumentException {
+        if(quote == null) {
+            logger.info("Quote is null, throwing IllegalArgumentException");
             throw new IllegalArgumentException("Quote cannot be null");
         }
-        boolean exists = this.findById(entity.getTicker()).isPresent();
-        return exists ? this.saveExisting(entity) : this.createNew(entity); 
+        logger.info("Saving quote " + quote.getTicker());
+        boolean exists = this.findById(quote.getTicker()).isPresent();
+        return exists ? this.saveExisting(quote) : this.createNew(quote); 
     }
 
     private Quote getQuoteFromRS(ResultSet rs) throws SQLException {
@@ -117,6 +156,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public Optional<Quote> findById(String id) throws IllegalArgumentException {
+        logger.info("Excecuting query: " + FIND_BY_ID.replace("\\?", "'"+ id + "'"));
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(FIND_BY_ID)) {
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -124,45 +164,50 @@ public class QuoteDao implements CrudDao<Quote, String> {
             while(rs.next()) {
                 quote = this.getQuoteFromRS(rs);
             }
+            logger.info("Found " + quote == null ? 0:1);
             return quote == null ? Optional.empty() : Optional.of(quote);
         } catch(SQLException e) {
-            logger.error("Error while finding quote with ID " + id, e);
+            logger.error("Error while finding quote with ID " + id + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public Iterable<Quote> findAll() {
+        logger.info("Excuting query: " + SELECT_ALL);
         ArrayList<Quote> quotes = new ArrayList<>();
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_ALL)) {
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()) {
                 quotes.add(this.getQuoteFromRS(rs));
             }
+            logger.info("Found " + quotes.size() + " quotes in DB");
             return quotes;
         } catch(SQLException e) {
-            logger.error("Error while selecting all", e);
+            logger.error("Error while selecting all\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteById(String id) throws IllegalArgumentException {
+        logger.info("Executing query " + DELETE.replace("\\?", "'" + id + "'"));
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE)) {
             preparedStatement.setString(1, id);
             preparedStatement.execute();
         } catch(SQLException e) {
-            logger.error("Error while deleting quote with id " + id, e);
+            logger.error("Error while deleting quote with id " + id + "\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deleteAll() {
+        logger.info("Executing query: " + DELETE_ALL);
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE_ALL)) {
             preparedStatement.execute();
         } catch(SQLException e) {
-            logger.error("Error while deleting all quotes", e);
+            logger.error("Error while deleting all quotes\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         }
     }

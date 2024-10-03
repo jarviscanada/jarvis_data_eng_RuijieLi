@@ -2,18 +2,23 @@ package ca.jrvs.stockquote.service;
 
 import java.util.List;
 import java.util.Optional;
+import org.apache.log4j.Logger;
 
 import ca.jrvs.stockquote.access.database.Quote;
 import ca.jrvs.stockquote.access.database.QuoteDao;
 import ca.jrvs.stockquote.access.httpexternalapi.QuoteHttpHelper;
+import ca.jrvs.stockquote.service.exceptions.InvalidTickerException;
+import ca.jrvs.stockquote.util.StackTraceUtil;
 
 public class QuoteService {
     private QuoteDao dao;
     private QuoteHttpHelper httpHelper;
-
+    private static Logger logger;
     public QuoteService(QuoteDao dao, QuoteHttpHelper helper) {
+        logger = Logger.getLogger(QuoteService.class);
         this.dao = dao;
         this.httpHelper = helper;
+        logger.info("Quote service initialized");
     }
 
     /**
@@ -22,33 +27,50 @@ public class QuoteService {
      * @return Latest quote information or empty optional if ticker symbol not found
      */
     public Optional<Quote> fetchQuoteDataFromAPI(String ticker) {
+        logger.info("Fetching " + ticker + " from API");
         Quote quote = this.httpHelper.fetchQuoteInfo(ticker);
-        return quote == null ? Optional.empty() : Optional.of(this.dao.save(quote));
+
+        if(quote == null) {
+            logger.info("Ticker " + ticker + " does not exist. Throwing InvalidTickerException");
+            throw new InvalidTickerException(ticker + " does not exist");
+        }
+        return Optional.of(this.dao.save(quote));
     }
 
     public Optional<Quote> fetchFromDB(String ticker) {
+        logger.info("Fetching " + ticker + " from DB");
         return this.dao.findById(ticker);
     }
 
     public Optional<Quote> fetch(String ticker) {
+        logger.info("Fetching " + ticker + "(check API if not in DB)");
         Optional<Quote> quote = this.fetchFromDB(ticker);
         return quote.isPresent() ? quote : this.fetchQuoteDataFromAPI(ticker);
     }
 
     public List<Quote> fetchAll() {
+        logger.info("Fetching all stocks inside DB");
         return (List<Quote>)dao.findAll();
     }
 
     public void updateAll() {
+        logger.info("Updating all stocks");
         List<Quote> quotes = this.fetchAll();
-        for(Quote quote: quotes) {
-            System.out.println("Updating: " + quote.getTicker() + " (last updated: " + quote.getTimestamp() + " )");
-            Optional<Quote> updated = this.fetchQuoteDataFromAPI(quote.getTicker());
-            if(updated.isPresent()) {
-                System.out.println("Updated: " + updated.get().getTicker() + " (last updated: " + updated.get().getTimestamp() + " )");
-            } else {
-                System.out.println("Updating " + quote.getTicker() + " failed");
+        String currentQuote = "";
+            for(Quote quote: quotes) {
+                try{
+                    System.out.println("Updating: " + quote.getTicker() + " (last updated: " + quote.getTimestamp() + " )");
+                    currentQuote = quote.getTicker();
+                    Optional<Quote> updated = this.fetchQuoteDataFromAPI(quote.getTicker());
+                    if(updated.isPresent()) {
+                        System.out.println("Updated : " + updated.get().getTicker() + " (last updated: " + updated.get().getTimestamp() + " )");
+                    } else {
+                        System.out.println("Updating  " + quote.getTicker() + " failed");
+                    }
+                } catch(Exception e) {
+                    logger.error("An unexpected problem occured while updating " + currentQuote + ": " + e.getCause() + "\n" + StackTraceUtil.getStackTrace(e));
+                    System.out.println("Error while updating " + currentQuote + " : " + e.getMessage());
+                }    
             }
-        }
     }
 }
