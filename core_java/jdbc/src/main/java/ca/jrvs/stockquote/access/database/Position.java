@@ -67,7 +67,7 @@ public class Position {
     }
 
     public String toUserString() {
-        String[] titles = this.getAttributeTitles();
+        String[] titles = Position.getAttributeTitles();
         String[] values = this.getAttributeValues();
         return StringUtil.toUserString(values, titles);
     }

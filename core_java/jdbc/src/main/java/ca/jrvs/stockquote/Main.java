@@ -127,8 +127,6 @@ public class Main {
                         break;
                 }
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {

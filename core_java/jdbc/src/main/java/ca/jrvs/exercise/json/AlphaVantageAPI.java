@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,9 +14,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-
-// import java.net.http.HttpRequest;
-// import com.google.api.client.http.HttpRequest;
 
 public class AlphaVantageAPI {
     public static final String companyStr = "{\n"

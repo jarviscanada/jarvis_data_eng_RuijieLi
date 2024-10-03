@@ -2,24 +2,11 @@ package ca.jrvs.stockquote.access.database;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import ca.jrvs.stockquote.controller.StringUtil;
-/*
-        : "TSLA",
-        : "241.4900",
-        : "243.9900",
-        : "235.9200",
-        : "238.2500",
-        : "99766753",
-        : "2024-09-20",
-        : "243.9200",
-        : "-5.6700",
-        : "-2.3245%"
- */
+
 public class Quote {
 
     @JsonProperty("01. symbol")
@@ -165,7 +152,7 @@ public class Quote {
     public String toUserString() {
         // int max = -1;
         String[] values = this.getAttributeValues();
-        String[] titles = this.getAttributeTitles();
+        String[] titles = Position.getAttributeTitles();
         return StringUtil.toUserString(values, titles);
     }
 
