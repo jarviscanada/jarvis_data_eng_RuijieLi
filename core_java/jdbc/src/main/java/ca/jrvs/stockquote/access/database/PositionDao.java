@@ -117,7 +117,7 @@ public class PositionDao implements CrudDao<Position, String> {
             while(rs.next()) {
                 position = this.getPositionFromRS(rs);
             }
-            logger.info(position == null ? 0 : 1 + " position found");
+            logger.info((position == null ? 0 : 1) + " position found");
             return position == null ? Optional.empty() : Optional.of(position);
         } catch(SQLException e) {
             logger.error("Error while finding position with ID " + id + "\n" + StackTraceUtil.getStackTrace(e));

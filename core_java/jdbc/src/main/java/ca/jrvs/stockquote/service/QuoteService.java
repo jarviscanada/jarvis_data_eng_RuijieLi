@@ -26,7 +26,7 @@ public class QuoteService {
      * @param ticker
      * @return Latest quote information or empty optional if ticker symbol not found
      */
-    public Optional<Quote> fetchQuoteDataFromAPI(String ticker) {
+    public Optional<Quote> fetchQuoteDataFromAPI(String ticker) throws InvalidTickerException{
         logger.info("Fetching " + ticker + " from API");
         Quote quote = this.httpHelper.fetchQuoteInfo(ticker);
 
@@ -42,7 +42,7 @@ public class QuoteService {
         return this.dao.findById(ticker);
     }
 
-    public Optional<Quote> fetch(String ticker) {
+    public Optional<Quote> fetch(String ticker) throws InvalidTickerException{
         logger.info("Fetching " + ticker + "(check API if not in DB)");
         Optional<Quote> quote = this.fetchFromDB(ticker);
         return quote.isPresent() ? quote : this.fetchQuoteDataFromAPI(ticker);
@@ -67,6 +67,10 @@ public class QuoteService {
                 } else {
                     System.out.println("Updating  " + quote.getTicker() + " failed");
                 }
+            } catch(InvalidTickerException e) {
+                logger.error("Caught InvalidTickerException : " + currentQuote + " is not a valid stock");
+                System.out.println(currentQuote + " is not a valid stock.");
+                
             } catch(Exception e) {
                 logger.error("An unexpected problem occured while updating " + currentQuote + ": " + e.getCause() + "\n" + StackTraceUtil.getStackTrace(e));
                 System.out.println("Error while updating " + currentQuote + " : " + e.getMessage());

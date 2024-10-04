@@ -156,7 +156,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public Optional<Quote> findById(String id) throws IllegalArgumentException {
-        logger.info("Excecuting query: " + FIND_BY_ID.replace("\\?", "'"+ id + "'"));
+        logger.info("Executing query: " + FIND_BY_ID.replace("?", "'"+ id + "'"));
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(FIND_BY_ID)) {
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -164,7 +164,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
             while(rs.next()) {
                 quote = this.getQuoteFromRS(rs);
             }
-            logger.info("Found " + quote == null ? 0:1);
+            logger.info("Found " + (quote == null ? 0:1));
             return quote == null ? Optional.empty() : Optional.of(quote);
         } catch(SQLException e) {
             logger.error("Error while finding quote with ID " + id + "\n" + StackTraceUtil.getStackTrace(e));
@@ -174,7 +174,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public Iterable<Quote> findAll() {
-        logger.info("Excuting query: " + SELECT_ALL);
+        logger.info("Executing query: " + SELECT_ALL);
         ArrayList<Quote> quotes = new ArrayList<>();
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_ALL)) {
             ResultSet rs = preparedStatement.executeQuery();
@@ -191,7 +191,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
 
     @Override
     public void deleteById(String id) throws IllegalArgumentException {
-        logger.info("Executing query " + DELETE.replace("\\?", "'" + id + "'"));
+        logger.info("Executing query " + DELETE.replace("?", "'" + id + "'"));
         try(PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE)) {
             preparedStatement.setString(1, id);
             preparedStatement.execute();

@@ -37,37 +37,46 @@ public class StockQuoteController {
     }
 
     public void displayStock(String chosenStock) {
-        logger.info("Displaying stock: " + chosenStock);
-        Optional<Quote> quote = quoteService.fetch(chosenStock);
-        if(quote.isPresent()) {
-            System.out.println(quote.get().toUserString());
-        } else {
-            System.out.println(chosenStock + " does not exist");
+        try {
+            logger.info("Displaying stock: " + chosenStock);
+            Optional<Quote> quote = quoteService.fetch(chosenStock);
+            if(quote.isPresent()) {
+                System.out.println(quote.get().toUserString());
+            } else {
+                System.out.println(chosenStock + " does not exist");
+            }
+        } catch(InvalidTickerException e) {
+            logger.error("Invalid ticker exception: " + e.getMessage());
         }
     }
 
     public void displayPosition(String chosenStock) {
-        logger.info("Displaying position: " + chosenStock);
-        Optional<Position> positionWrapper = positionService.find(chosenStock);
-        Optional<Quote> quoteWrapper = quoteService.fetch(chosenStock);
-        if(positionWrapper.isPresent()) {
-            Position position = positionWrapper.get();
-            Quote quote = quoteWrapper.get();
-            position.setCurrentValue((double)Math.round(quote.getPrice() * position.getNumOfShares()* 100) / 100 );
-            System.out.println(position.toUserString());
-        } else {
-            System.out.println("You do not own " + chosenStock + " yet.");
-        }
+        try {
+            logger.info("Displaying position: " + chosenStock);
+            Optional<Position> positionWrapper = positionService.find(chosenStock);
+            if(positionWrapper.isPresent()) {
+                Position position = positionWrapper.get();
+                System.out.println(position.toUserString());
+            } else {
+                System.out.println("You do not own " + chosenStock + " yet.");
+            }
+        } catch(InvalidTickerException e) {
+            logger.error("Invalid ticker exception: " + e.getMessage());
+        } 
     }
 
     public void displayAllPositions() {
-        logger.info("Displaying all owned positions");
-        List<Position> positions = positionService.findAll();
-        List<String[]> values = new ArrayList<>();
-        for(Position position:positions) {
-            values.add(position.getAttributeValues());
+        try {
+            logger.info("Displaying all owned positions");
+            List<Position> positions = positionService.findAll();
+            List<String[]> values = new ArrayList<>();
+            for(Position position:positions) {
+                values.add(position.getAttributeValues());
+            }
+            System.out.println(StringUtil.toUserString(values, Position.getAttributeTitles()));
+        } catch(InvalidTickerException e) {
+            logger.error("Invalid ticker exception: " + e.getMessage());
         }
-        System.out.println(StringUtil.toUserString(values, Position.getAttributeTitles()));
     }
 
     public void clear() {
@@ -108,19 +117,19 @@ public class StockQuoteController {
     }
 
     public void buy(String chosenStock, int stockNumber) {
-        logger.info("Buying " + stockNumber + " units of " + chosenStock);
-        Optional<Quote> quote = this.quoteService.fetchFromDB(chosenStock);
-
-        if(!quote.isPresent()){
-            logger.info(chosenStock + " is not in database. Fetching from API");
-            quote = this.quoteService.fetchQuoteDataFromAPI(chosenStock);
-        }
-        if(!quote.isPresent()) {
-            logger.info(chosenStock + " is invalid.");
-            System.out.println(chosenStock + " is not a valid stock. Please choose something else.");
-            return;
-        }
         try {
+            logger.info("Buying " + stockNumber + " units of " + chosenStock);
+            Optional<Quote> quote = this.quoteService.fetchFromDB(chosenStock);
+    
+            if(!quote.isPresent()){
+                logger.info(chosenStock + " is not in database. Fetching from API");
+                quote = this.quoteService.fetchQuoteDataFromAPI(chosenStock);
+            }
+            if(!quote.isPresent()) {
+                logger.info(chosenStock + " is invalid.");
+                System.out.println(chosenStock + " is not a valid stock. Please choose something else.");
+                return;
+            }
             Position position = this.positionService.buy(chosenStock, stockNumber, quote.get().getPrice());
             System.out.println("You have successfully bought " + stockNumber + " of " + chosenStock + ". Your position is now ");
             System.out.println(position.toUserString());
