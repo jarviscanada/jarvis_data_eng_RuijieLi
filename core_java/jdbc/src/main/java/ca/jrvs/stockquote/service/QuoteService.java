@@ -26,7 +26,7 @@ public class QuoteService {
      * @param ticker
      * @return Latest quote information or empty optional if ticker symbol not found
      */
-    public Optional<Quote> fetchQuoteDataFromAPI(String ticker) throws InvalidTickerException{
+    public Optional<Quote> fetchQuoteDataFromAPI(String ticker) throws InvalidTickerException {
         logger.info("Fetching " + ticker + " from API");
         Quote quote = this.httpHelper.fetchQuoteInfo(ticker);
 
@@ -37,9 +37,14 @@ public class QuoteService {
         return Optional.of(this.dao.save(quote));
     }
 
-    public Optional<Quote> fetchFromDB(String ticker) {
+    public Optional<Quote> fetchFromDB(String ticker) throws InvalidTickerException {
         logger.info("Fetching " + ticker + " from DB");
-        return this.dao.findById(ticker);
+        
+        Optional<Quote> quote = this.dao.findById(ticker);
+        if(!quote.isPresent()) {
+            throw new InvalidTickerException(ticker + "is not valid");
+        }
+        return quote;
     }
 
     public Optional<Quote> fetch(String ticker) throws InvalidTickerException{

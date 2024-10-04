@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.jrvs.stockquote.access.database.Quote;
+import ca.jrvs.stockquote.service.exceptions.InvalidTickerException;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -51,7 +52,7 @@ public class QuoteHttpHelper {
         logger.info("Initialized QuoteHttpHelper");
     }
 
-    public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException {
+    public Quote fetchQuoteInfo(String symbol) throws IllegalArgumentException, InvalidTickerException {
         final String link = "https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol="+symbol+"&datatype=json";
         logger.info("Requesting: " + link);
         HttpRequest request = HttpRequest.newBuilder()
@@ -72,8 +73,8 @@ public class QuoteHttpHelper {
             logger.info("Request returned response with status code " + response.statusCode() + "\n" + response.headers() + "\n" + response.body());
 
             if(innerMap.get("01. symbol") == null || innerMap.get("01. symbol").equals("null")) {
-                logger.info("Quote is null. Returning null.");
-                return null;
+                logger.info("Quote is null. throwing invalid ticker exception.");
+                throw new InvalidTickerException(symbol + " is not a valid stock");
             }
             String innerJson = objectMapper.writeValueAsString(
                 innerMap

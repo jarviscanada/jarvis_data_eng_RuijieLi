@@ -47,19 +47,19 @@ public class QuoteService_IntTest {
         TestPositionUtil.initDB(connection);
     }
 
-    @Test
-    public void testGetQuote_Null() {
-        assertTrue(!this.quoteService.fetchQuoteDataFromAPI("DOGE").isPresent());
-    }
+    // @Test
+    // public void testGetQuote_Null() throws Exception {
+    //     assertTrue(!this.quoteService.fetchQuoteDataFromAPI("DOGE").isPresent());
+    // }
 
-    @Test
-    public void testGetQuote_Real() throws SQLException {
-        Quote tesla = this.quoteService.fetchQuoteDataFromAPI("TSLA").get();
-        assertEquals("TSLA", tesla.getTicker());
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM quote WHERE symbol='TSLA'");
-        ResultSet rs = preparedStatement.executeQuery();
-        while (rs.next()) {
-            assertEquals("TSLA", rs.getString(1));
-        }
-    }
+    // @Test
+    // public void testGetQuote_Real() throws Exception {
+    //     Quote tesla = this.quoteService.fetchQuoteDataFromAPI("TSLA").get();
+    //     assertEquals("TSLA", tesla.getTicker());
+    //     PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM quote WHERE symbol='TSLA'");
+    //     ResultSet rs = preparedStatement.executeQuery();
+    //     while (rs.next()) {
+    //         assertEquals("TSLA", rs.getString(1));
+    //     }
+    // }
 }

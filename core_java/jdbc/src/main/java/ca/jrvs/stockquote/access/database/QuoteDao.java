@@ -165,6 +165,7 @@ public class QuoteDao implements CrudDao<Quote, String> {
                 quote = this.getQuoteFromRS(rs);
             }
             logger.info("Found " + (quote == null ? 0:1));
+
             return quote == null ? Optional.empty() : Optional.of(quote);
         } catch(SQLException e) {
             logger.error("Error while finding quote with ID " + id + "\n" + StackTraceUtil.getStackTrace(e));
