@@ -57,20 +57,20 @@ public class QuoteService {
         logger.info("Updating all stocks");
         List<Quote> quotes = this.fetchAll();
         String currentQuote = "";
-            for(Quote quote: quotes) {
-                try{
-                    System.out.println("Updating: " + quote.getTicker() + " (last updated: " + quote.getTimestamp() + " )");
-                    currentQuote = quote.getTicker();
-                    Optional<Quote> updated = this.fetchQuoteDataFromAPI(quote.getTicker());
-                    if(updated.isPresent()) {
-                        System.out.println("Updated : " + updated.get().getTicker() + " (last updated: " + updated.get().getTimestamp() + " )");
-                    } else {
-                        System.out.println("Updating  " + quote.getTicker() + " failed");
-                    }
-                } catch(Exception e) {
-                    logger.error("An unexpected problem occured while updating " + currentQuote + ": " + e.getCause() + "\n" + StackTraceUtil.getStackTrace(e));
-                    System.out.println("Error while updating " + currentQuote + " : " + e.getMessage());
-                }    
-            }
+        for(Quote quote: quotes) {
+            try{
+                System.out.println("Updating: " + quote.getTicker() + " (last updated: " + quote.getTimestamp() + " )");
+                currentQuote = quote.getTicker();
+                Optional<Quote> updated = this.fetchQuoteDataFromAPI(quote.getTicker());
+                if(updated.isPresent()) {
+                    System.out.println("Updated : " + updated.get().getTicker() + " (last updated: " + updated.get().getTimestamp() + " )");
+                } else {
+                    System.out.println("Updating  " + quote.getTicker() + " failed");
+                }
+            } catch(Exception e) {
+                logger.error("An unexpected problem occured while updating " + currentQuote + ": " + e.getCause() + "\n" + StackTraceUtil.getStackTrace(e));
+                System.out.println("Error while updating " + currentQuote + " : " + e.getMessage());
+            }    
+        }
     }
 }
