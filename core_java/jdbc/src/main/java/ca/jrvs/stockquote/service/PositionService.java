@@ -31,7 +31,12 @@ public class PositionService {
 
     public Position buy(String ticker, int numberOfShares, double price) throws TooManyVolumesException, InvalidTickerException {
         logger.info("Buying " + numberOfShares + " units of " + ticker + " at price " + price);
-        Quote quoteToBuy = this.quoteService.fetch(ticker).get();
+        Optional<Quote> quoteToBuyWrapper = this.quoteService.fetch(ticker);
+        if(!quoteToBuyWrapper.isPresent()) {
+            logger.info(ticker + " is invalid, throwing InvalidTickerException");
+            throw new InvalidTickerException(ticker + " is not a valid ticker");
+        }
+        Quote quoteToBuy = quoteToBuyWrapper.get();
 
         if(numberOfShares > quoteToBuy.getVolume()) {
             logger.info("User tried to buy too many units of " + quoteToBuy + ". Throwing TooManyVolumesException");

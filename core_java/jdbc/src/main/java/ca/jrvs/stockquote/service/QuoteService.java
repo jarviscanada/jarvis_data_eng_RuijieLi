@@ -37,12 +37,12 @@ public class QuoteService {
         return Optional.of(this.dao.save(quote));
     }
 
-    public Optional<Quote> fetchFromDB(String ticker) throws InvalidTickerException {
+    public Optional<Quote> fetchFromDB(String ticker) {
         logger.info("Fetching " + ticker + " from DB");
         
         Optional<Quote> quote = this.dao.findById(ticker);
         if(!quote.isPresent()) {
-            throw new InvalidTickerException(ticker + "is not valid");
+            return Optional.empty();
         }
         return quote;
     }

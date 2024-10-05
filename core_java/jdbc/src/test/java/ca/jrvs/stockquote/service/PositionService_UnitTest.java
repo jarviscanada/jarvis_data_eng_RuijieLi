@@ -42,14 +42,13 @@ public class PositionService_UnitTest {
         // String expectedMsg = "Ticker " + fakeID + " does not exist";
         when(this.quoteDao.findById(fakeID)).thenReturn(Optional.empty());
         when(this.quoteService.fetchQuoteDataFromAPI(fakeID)).thenReturn(Optional.empty());
-        // Exception e = assertThrows(InvalidTickerException.class, () -> {
-        try {
+        assertThrows(InvalidTickerException.class, () -> {
             this.positionService.buy(fakeID, 100, 100);
-        // });
-        } catch(Exception e){
-            System.out.println("0000000000000000000000000000000000000");
-            e.printStackTrace();
-        }
+        });
+        // } catch(Exception e){
+        //     System.out.println("0000000000000000000000000000000000000");
+        //     e.printStackTrace();
+        // }
     }
     // @Test
     // public void testBuy_ValidStockNotInDB_MoreThanVolume() throws Exception {

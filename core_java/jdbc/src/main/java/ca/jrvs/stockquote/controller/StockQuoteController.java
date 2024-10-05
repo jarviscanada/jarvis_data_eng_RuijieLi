@@ -147,8 +147,8 @@ public class StockQuoteController {
 
     public void sell(String chosenStock, int numberToSell) {
         logger.info("Selling " + numberToSell + " units of " + chosenStock);
-        Optional<Quote> quote = this.quoteService.fetchFromDB(chosenStock);
         try {
+            Optional<Quote> quote = this.quoteService.fetchFromDB(chosenStock);
             if(!quote.isPresent()) {
                 logger.info("User does not own " + chosenStock);
                 System.out.println("You do not own " + chosenStock);

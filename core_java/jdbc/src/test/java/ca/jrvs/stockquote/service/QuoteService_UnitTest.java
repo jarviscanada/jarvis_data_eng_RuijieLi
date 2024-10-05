@@ -38,7 +38,7 @@ public class QuoteService_UnitTest {
         // when(this.helper.fetchQuoteInfo("SLSDJFLS")).thenReturn(null);
         // assertTrue(!this.quoteService.fetchQuoteDataFromAPI("SLSDJFLS").isPresent());
         assertThrows(InvalidTickerException.class, () -> {
-            this.helper.fetchQuoteInfo("SLSDJFLS");
+            this.quoteService.fetch("SLSDJFLS");
         });
     }
 }
