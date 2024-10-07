@@ -1,22 +1,15 @@
 package ca.jrvs.stockquote.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import ca.jrvs.stockquote.access.database.DatabaseUtil;
-import ca.jrvs.stockquote.access.database.Quote;
 import ca.jrvs.stockquote.access.database.QuoteDao;
 import ca.jrvs.stockquote.access.database.util.TestPositionUtil;
 import ca.jrvs.stockquote.access.httpexternalapi.QuoteHttpHelper;
