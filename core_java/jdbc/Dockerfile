@@ -1,5 +1,11 @@
+# This is from ChatGPT
 FROM openjdk:11
-COPY . /usr/src/myapp
 WORKDIR /usr/src/myapp
-RUN javac Main.java
-CMD ["java", "Main"]
+COPY stockquote.jar /usr/src/myapp
+COPY src/main/resources /usr/src/myapp/src/main/resources
+COPY src/main/log /usr/src/myapp/src/main/log
+
+EXPOSE 443
+EXPOSE 5432
+
+ENTRYPOINT ["java", "-jar", "stockquote.jar"]

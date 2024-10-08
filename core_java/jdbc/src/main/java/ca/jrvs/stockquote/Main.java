@@ -5,9 +5,6 @@ import java.io.Console;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,11 +21,14 @@ import ca.jrvs.stockquote.controller.StockQuoteController;
 import ca.jrvs.stockquote.controller.UserActions;
 import ca.jrvs.stockquote.service.PositionService;
 import ca.jrvs.stockquote.service.QuoteService;
+import ca.jrvs.stockquote.util.StackTraceUtil;
 import okhttp3.OkHttpClient;
 
 public class Main {
     static Logger logger = Logger.getLogger(Main.class);
+    
     public static void main(String[] args) {
+        
         PropertyConfigurator.configure("src/main/resources/log4j.properties");
         logger.info("======= Program started =======");
         Map<String, String> properties = new HashMap<>();
@@ -41,18 +41,21 @@ public class Main {
             }
             logger.info("Finished reading " + databasePrameters);
         } catch (FileNotFoundException e) {
-            logger.error("Error: file not found exception" + e.getMessage());
+            logger.error("Error: file not found exception\n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);
         } catch (IOException e) {
-            logger.error("IO Exception " + e.getMessage());
+            logger.error("IO Exception \n" + StackTraceUtil.getStackTrace(e));
+            throw new RuntimeException(e);            
+        } catch(Exception e) {
+            logger.error("Unexpected exception occured: \n" + StackTraceUtil.getStackTrace(e));
             throw new RuntimeException(e);            
         }
 
-        // try {
-        //     Class.forName(properties.get("db-class"));
-        // } catch (ClassNotFoundException e) {
-        //     e.printStackTrace();
-        // }
+        String apiKey = System.getenv("API_KEY");
+        if(apiKey == null) {
+            logger.error("API KEY NOT SET");
+            throw new RuntimeException("Error: API_KEY environment variable not set");
+        }
 
         OkHttpClient client = new OkHttpClient();
         String url = "jdbc:postgresql://"+properties.get("server")+":"+properties.get("port")+"/"+properties.get("database");
@@ -65,8 +68,7 @@ public class Main {
             QuoteDao qRepo = new QuoteDao(c);
             PositionDao pRepo = new PositionDao(c);
 
-            byte[] keyBytes = Files.readAllBytes(Paths.get(properties.get("api-key-path")));
-            String apiKey = new String(keyBytes, StandardCharsets.UTF_8).strip();
+            // byte[] keyBytes = Files.readAllBytes(Paths.get(properties.get("api-key-path")));
 
             QuoteHttpHelper rcon = new QuoteHttpHelper(apiKey, client);
             QuoteService sQuote = new QuoteService(qRepo, rcon);
@@ -148,9 +150,8 @@ public class Main {
             }
         } catch (SQLException e) {
             logger.error("SQL Exception: " + e.getCause() + e.getMessage());
-        } catch (IOException e) {
-            // e.printStackTrace();
-            logger.error("Error exception: " + e.getCause() + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error: \n" + StackTraceUtil.getStackTrace(e));
         }
     }
 }

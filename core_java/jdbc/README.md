@@ -5,6 +5,11 @@ This is a basic Java app that allows the user to:
 3. Display one stock (online or in the database) or all stocks in the database
 4. Display one or all stocks that the user owns
 The information on the stocks comes from the Alpha Vantage API. The retrieved information is then stored in a local PostgreSQL database that runs in Docker. Since we do not have write access to the API, all user transactions are stored in the local database. The user interface is inspired by VIM.
+To use the app:
+1. `sudo docker run -d -p 5432:5432 --name test-psql ruijie99/jrvs_stockquote_db`
+2. `sudo docker exec -i test-psql psql -U postgres -d postgres < path/to/stock_quote.sql`
+3. `sudo docker run --network=host -it -e API_KEY=your-api-key-here ruijie99/stockquote`
+To get an API key, visit https://rapidapi.com/alphavantage/api/alpha-vantage
 
 # Implementaiton
 ## ER Diagram
